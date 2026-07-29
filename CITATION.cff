@@ -1,0 +1,53 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite the paper and its record as below."
+title: "Gubernaut: A Deterministic Homeostatic Controller for Affect-Regulated LLM Agents, Validated Across Independent Model Families"
+# A person, not an organization. The previous `- name: "Gubernaut Research"` form
+# declares an ENTITY; Zenodo read it as a personal name and split it, rendering the
+# author as "Research, Gubernaut". People need given-names/family-names.
+authors:
+  - given-names: "Dushyant"
+    family-names: "Sharma"
+    affiliation: "Gubernaut Research"
+    orcid: "https://orcid.org/0009-0007-6534-0347"
+    email: "dushyant@gubernaut.com"
+year: 2026
+license: CC-BY-4.0
+# The CONCEPT DOI: it always resolves to the newest archived version. Never put a
+# version DOI here — it pins every reader to whichever release happened to be first.
+doi: 10.5281/zenodo.21303518
+url: "https://gubernaut.com"
+repository-code: "https://github.com/thegubernaut/Gubernaut_Validation"
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.21303518
+    description: "Concept DOI — resolves to the latest archived version"
+  - type: url
+    value: "https://gubernaut.com/paper/gubernaut_whitepaper.pdf"
+    description: "White paper (camera-ready PDF)"
+keywords:
+  - LLM agents
+  - runtime control layer
+  - homeostatic regulation
+  - metacognition
+  - affect regulation
+  - cognitive governor
+  - LLM-as-a-judge
+  - cross-family evaluation
+  - prompt injection
+  - AI safety
+  - pre-registration
+  - reproducibility
+abstract: >-
+  Pre-registered, cross-family, generate-once / judge-many evaluation of a
+  deterministic runtime control layer for LLM agents. Four frontier models
+  (GPT-5.5, Claude Opus 4.8, Gemini 3.5 Flash, Grok 4.3), each serving as both
+  generator and judge, form a symmetric 4x4 matrix: the regulated arm is calmer
+  in 15 of 16 cells by sign (11 of 12 off-diagonal) and 13 of 16 at p<.05, with
+  the one null cell (-0.04, GPT x Gemini) reported alongside the headline; the
+  recovery signature replicates 4/4. The three sub-threshold cells all fall on
+  the single near-saturated host. The effect survives a lineage-independent
+  fourth judge family. The earlier three-model matrix was pre-registered and
+  frozen before the fourth family was added; adding it changed no earlier cell,
+  and both ship verbatim. Transcripts, judge panels (SHA-256), and the combine
+  script are published so the result is independently recomputable. No
+  consciousness claims are made.

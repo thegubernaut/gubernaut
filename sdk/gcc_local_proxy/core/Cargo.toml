@@ -1,0 +1,35 @@
+[package]
+name = "gcc-core"
+version = "1.0.0"
+edition = "2021"
+description = "GCC deterministic meta-level controller (HRL) — compiled core with golden-trace parity to the Python reference"
+license = "Apache-2.0"
+readme = "README.md"
+keywords = ["llm", "agents", "governance", "wasm", "deterministic"]
+categories = ["wasm", "algorithms", "science"]
+repository = "https://github.com/thegubernaut/gubernaut"
+homepage = "https://gubernaut.com"
+# Publish guard removed 2026-07-27 (user-directed pre-publish arming). `cargo
+# publish` will proceed from this copy; the office lane keeps `publish = false`.
+
+[package.metadata.gubernaut]
+# Concept (all-versions) DOI — canonical citation target for the packages.
+doi = "10.5281/zenodo.21303518"
+
+[lib]
+crate-type = ["lib", "cdylib"]
+
+# Tuned for a small, self-contained wasm cdylib (added 0.1.1 with the FFI shim).
+# `cargo test` uses the dev/test profile and is unaffected by these.
+[profile.release]
+opt-level = "z"      # optimise for size (edge/wasm target)
+lto = true
+codegen-units = 1
+panic = "abort"      # no unwinding tables in the wasm module
+strip = true         # strip local/debug symbols (keeps #[no_mangle] exports)
+
+[dev-dependencies]
+# float_roundtrip: serde_json's default float parse can be 1 ulp off; the
+# parity contract compares bits, so the golden reader must be exactly rounded.
+# Pinned to the lockfile version for a reproducible packaged verify build.
+serde_json = { version = "=1.0.150", features = ["float_roundtrip"] }

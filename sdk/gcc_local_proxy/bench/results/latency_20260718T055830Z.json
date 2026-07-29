@@ -1,0 +1,52 @@
+{
+  "timestamp": "20260718T055830Z",
+  "python": "3.14.5",
+  "platform": "Windows 11 AMD64",
+  "meta_decision": {
+    "hrl_tick": {
+      "n": 100000,
+      "mean_us": 1.548251,
+      "p50_us": 1.5,
+      "p95_us": 1.6,
+      "p99_us": 2.8,
+      "max_us": 239.2
+    },
+    "full_replay_12_turns": {
+      "n": 5000,
+      "mean_us": 212.98342000000002,
+      "p50_us": 203.7,
+      "p95_us": 274.2,
+      "p99_us": 407.6,
+      "max_us": 1036.2
+    }
+  },
+  "e2e": {
+    "direct": {
+      "n": 300,
+      "mean_us": 823.9313333333333,
+      "p50_us": 769.8,
+      "p95_us": 1194.2,
+      "p99_us": 1464.7,
+      "max_us": 1762.1
+    },
+    "proxied": {
+      "n": 300,
+      "mean_us": 1326.212,
+      "p50_us": 1196.5,
+      "p95_us": 2119.2,
+      "p99_us": 2724.7,
+      "max_us": 3073.1
+    },
+    "overhead_ms": {
+      "p50": 0.4267,
+      "p95": 0.9249999999999998,
+      "mean": 0.5022806666666667
+    }
+  },
+  "budgets": {
+    "hrl_tick_under_2ms": true,
+    "replay_under_2ms": true,
+    "e2e_under_50ms": true,
+    "e2e_under_20ms": true
+  }
+}

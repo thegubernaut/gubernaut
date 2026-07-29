@@ -1,0 +1,596 @@
+{
+  "summary": {
+    "aborted": null,
+    "spend_usd": 0.0548,
+    "estimated_usage_calls": 0,
+    "phases": {
+      "non_streaming_short": {
+        "direct": {
+          "n": 20,
+          "ok": 16,
+          "errors": [
+            "HTTPStatusError: Client error '401 Unauthorized' for url 'https://api.openai.com/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401",
+            "HTTPStatusError: Client error '401 Unauthorized' for url 'https://api.openai.com/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401",
+            "HTTPStatusError: Client error '401 Unauthorized' for url 'https://api.openai.com/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401",
+            "HTTPStatusError: Client error '401 Unauthorized' for url 'https://api.openai.com/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"
+          ],
+          "p50_s": 0.6621,
+          "p95_s": 2.8859
+        },
+        "proxy": {
+          "n": 20,
+          "ok": 15,
+          "errors": [
+            "HTTPStatusError: Client error '401 Unauthorized' for url 'http://127.0.0.1:18080/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401",
+            "HTTPStatusError: Client error '401 Unauthorized' for url 'http://127.0.0.1:18080/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401",
+            "HTTPStatusError: Client error '401 Unauthorized' for url 'http://127.0.0.1:18080/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401",
+            "HTTPStatusError: Client error '401 Unauthorized' for url 'http://127.0.0.1:18080/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401",
+            "HTTPStatusError: Client error '401 Unauthorized' for url 'http://127.0.0.1:18080/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"
+          ],
+          "p50_s": 0.6627,
+          "p95_s": 0.9802
+        },
+        "added_overhead_p50_s": 0.0006
+      },
+      "streaming_short": {
+        "direct": {
+          "n": 10,
+          "ok": 7,
+          "errors": [
+            "HTTPStatusError: Client error '401 Unauthorized' for url 'https://api.openai.com/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401",
+            "HTTPStatusError: Client error '401 Unauthorized' for url 'https://api.openai.com/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401",
+            "HTTPStatusError: Client error '401 Unauthorized' for url 'https://api.openai.com/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"
+          ],
+          "p50_s": 0.6361,
+          "p95_s": 2.1275,
+          "first_chunk_p50_s": 0.4204
+        },
+        "proxy": {
+          "n": 10,
+          "ok": 10,
+          "errors": [],
+          "p50_s": 0.6355,
+          "p95_s": 2.0012,
+          "first_chunk_p50_s": 0.4055
+        },
+        "added_overhead_p50_s": -0.0006
+      },
+      "long_history": {
+        "direct": {
+          "n": 5,
+          "ok": 3,
+          "errors": [
+            "HTTPStatusError: Client error '401 Unauthorized' for url 'https://api.openai.com/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401",
+            "HTTPStatusError: Client error '401 Unauthorized' for url 'https://api.openai.com/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"
+          ],
+          "p50_s": 0.6208,
+          "p95_s": 0.811
+        },
+        "proxy": {
+          "n": 5,
+          "ok": 4,
+          "errors": [
+            "HTTPStatusError: Client error '401 Unauthorized' for url 'http://127.0.0.1:18080/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"
+          ],
+          "p50_s": 0.7279,
+          "p95_s": 3.3444
+        },
+        "added_overhead_p50_s": 0.1071
+      }
+    }
+  },
+  "raw": {
+    "model": "gpt-5.6-luna",
+    "cap_usd": 2.0,
+    "phases": {
+      "non_streaming_short": {
+        "direct": [
+          {
+            "ok": true,
+            "latency_s": 0.8058097000030102,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.6460513999918476,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": false,
+            "latency_s": 0.283972499993979,
+            "first_chunk_s": null,
+            "usage_authoritative": null,
+            "error": "HTTPStatusError: Client error '401 Unauthorized' for url 'https://api.openai.com/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"
+          },
+          {
+            "ok": false,
+            "latency_s": 0.30568390000553336,
+            "first_chunk_s": null,
+            "usage_authoritative": null,
+            "error": "HTTPStatusError: Client error '401 Unauthorized' for url 'https://api.openai.com/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"
+          },
+          {
+            "ok": true,
+            "latency_s": 0.784302200001548,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.7386533999961102,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.7143171999923652,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.6200045000005048,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.6647443999972893,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.5975072000001092,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.5910599999915576,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.6720474999892758,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 2.6145486000023084,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.6132724000053713,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.7035517999902368,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.6594961999944644,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.587156399997184,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": false,
+            "latency_s": 0.2652873000042746,
+            "first_chunk_s": null,
+            "usage_authoritative": null,
+            "error": "HTTPStatusError: Client error '401 Unauthorized' for url 'https://api.openai.com/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"
+          },
+          {
+            "ok": false,
+            "latency_s": 0.47565989999566227,
+            "first_chunk_s": null,
+            "usage_authoritative": null,
+            "error": "HTTPStatusError: Client error '401 Unauthorized' for url 'https://api.openai.com/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"
+          },
+          {
+            "ok": true,
+            "latency_s": 0.5986190000112401,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          }
+        ],
+        "proxy": [
+          {
+            "ok": true,
+            "latency_s": 0.8093676999997115,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": false,
+            "latency_s": 0.23514280001109,
+            "first_chunk_s": null,
+            "usage_authoritative": null,
+            "error": "HTTPStatusError: Client error '401 Unauthorized' for url 'http://127.0.0.1:18080/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"
+          },
+          {
+            "ok": true,
+            "latency_s": 0.6749141000036616,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.6798898999986704,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.6162709000054747,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.5791348999919137,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.6627046999929007,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.5862338000006275,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.8430580999993253,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.6471703999995952,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.9573325000092154,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": false,
+            "latency_s": 0.23620159999700263,
+            "first_chunk_s": null,
+            "usage_authoritative": null,
+            "error": "HTTPStatusError: Client error '401 Unauthorized' for url 'http://127.0.0.1:18080/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"
+          },
+          {
+            "ok": false,
+            "latency_s": 0.23277499999676365,
+            "first_chunk_s": null,
+            "usage_authoritative": null,
+            "error": "HTTPStatusError: Client error '401 Unauthorized' for url 'http://127.0.0.1:18080/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"
+          },
+          {
+            "ok": true,
+            "latency_s": 0.6552541999990353,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.6634106999990763,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": false,
+            "latency_s": 0.26951319999352563,
+            "first_chunk_s": null,
+            "usage_authoritative": null,
+            "error": "HTTPStatusError: Client error '401 Unauthorized' for url 'http://127.0.0.1:18080/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"
+          },
+          {
+            "ok": true,
+            "latency_s": 0.6001259999902686,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": false,
+            "latency_s": 0.2765863999957219,
+            "first_chunk_s": null,
+            "usage_authoritative": null,
+            "error": "HTTPStatusError: Client error '401 Unauthorized' for url 'http://127.0.0.1:18080/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"
+          },
+          {
+            "ok": true,
+            "latency_s": 0.5768974000093294,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.7602347000065492,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          }
+        ]
+      },
+      "streaming_short": {
+        "direct": [
+          {
+            "ok": true,
+            "latency_s": 0.6142225999938091,
+            "first_chunk_s": 0.3521481999923708,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": false,
+            "latency_s": 0.2364750999986427,
+            "first_chunk_s": null,
+            "usage_authoritative": null,
+            "error": "HTTPStatusError: Client error '401 Unauthorized' for url 'https://api.openai.com/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"
+          },
+          {
+            "ok": true,
+            "latency_s": 0.760634599995683,
+            "first_chunk_s": 0.5599667999922531,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": false,
+            "latency_s": 0.23021829999925103,
+            "first_chunk_s": null,
+            "usage_authoritative": null,
+            "error": "HTTPStatusError: Client error '401 Unauthorized' for url 'https://api.openai.com/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"
+          },
+          {
+            "ok": true,
+            "latency_s": 1.6149150999990525,
+            "first_chunk_s": 1.3735492999985581,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": false,
+            "latency_s": 0.24400789999344852,
+            "first_chunk_s": null,
+            "usage_authoritative": null,
+            "error": "HTTPStatusError: Client error '401 Unauthorized' for url 'https://api.openai.com/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"
+          },
+          {
+            "ok": true,
+            "latency_s": 0.5411924999934854,
+            "first_chunk_s": 0.35944659999222495,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.7090003000048455,
+            "first_chunk_s": 0.4255946000048425,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.5812475999991875,
+            "first_chunk_s": 0.37433429999509826,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.6360961999889696,
+            "first_chunk_s": 0.42041589999280404,
+            "usage_authoritative": true,
+            "error": null
+          }
+        ],
+        "proxy": [
+          {
+            "ok": true,
+            "latency_s": 0.6253890999942087,
+            "first_chunk_s": 0.4276252999989083,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 1.5896381000056863,
+            "first_chunk_s": 1.4098210000083782,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.6091835999977775,
+            "first_chunk_s": 0.38195039999845903,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.6456246000016108,
+            "first_chunk_s": 0.3409671000117669,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.6216748000006191,
+            "first_chunk_s": 0.4145388000033563,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.6571340000082273,
+            "first_chunk_s": 0.4532012000126997,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.6749871000065468,
+            "first_chunk_s": 0.4470088000089163,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.5764711999945575,
+            "first_chunk_s": 0.3821521999925608,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.5760810999927344,
+            "first_chunk_s": 0.35391449999588076,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.6547523000044748,
+            "first_chunk_s": 0.3964968000072986,
+            "usage_authoritative": true,
+            "error": null
+          }
+        ]
+      },
+      "long_history": {
+        "direct": [
+          {
+            "ok": false,
+            "latency_s": 0.5992310000001453,
+            "first_chunk_s": null,
+            "usage_authoritative": null,
+            "error": "HTTPStatusError: Client error '401 Unauthorized' for url 'https://api.openai.com/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"
+          },
+          {
+            "ok": true,
+            "latency_s": 0.6169687000074191,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.7264476999989711,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.6207918000000063,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": false,
+            "latency_s": 0.35650200000964105,
+            "first_chunk_s": null,
+            "usage_authoritative": null,
+            "error": "HTTPStatusError: Client error '401 Unauthorized' for url 'https://api.openai.com/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"
+          }
+        ],
+        "proxy": [
+          {
+            "ok": true,
+            "latency_s": 0.7823893999884604,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.6734031999949366,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": true,
+            "latency_s": 0.6207872000086354,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          },
+          {
+            "ok": false,
+            "latency_s": 0.2907003000000259,
+            "first_chunk_s": null,
+            "usage_authoritative": null,
+            "error": "HTTPStatusError: Client error '401 Unauthorized' for url 'http://127.0.0.1:18080/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401"
+          },
+          {
+            "ok": true,
+            "latency_s": 2.2463694000034593,
+            "first_chunk_s": null,
+            "usage_authoritative": true,
+            "error": null
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "model": "meta-llama/llama-4-scout",
+  "proxy": "http://127.0.0.1:18083/v1",
+  "langchain": {
+    "intercepted_turn": 4,
+    "reply_head": "[GCC] Runaway loop intercepted by the local governor before any upstre",
+    "framework": "LangChain ChatOpenAI 1.3.5 (live OpenRouter)",
+    "wall_s": 3.93
+  },
+  "eliza_pattern": {
+    "intercepted_turn": 4,
+    "reply_head": "[GCC] Runaway loop intercepted by the local governor before any upstre",
+    "framework": "Eliza-pattern env-config (OPENAI_BASE_URL, OpenAI SDK, live OpenRouter)",
+    "wall_s": 6.35
+  },
+  "both_intercepted_by_turn_4": true
+}

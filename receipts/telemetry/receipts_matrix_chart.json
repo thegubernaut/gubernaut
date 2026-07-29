@@ -1,0 +1,85 @@
+{
+  "title": "Governed vs ungoverned upstream spend on loop traps",
+  "note": "OpenRouter rows = upstream-metered usage.cost; OpenAI/Anthropic = price-table token math; \u2020 Gemini-native Gemma is free-tier (token deltas, no dollars).",
+  "battery": "verbatim_loop",
+  "unit": "USD",
+  "series": [
+    {
+      "model": "GPT-5.6 Luna",
+      "vendor": "OpenAI",
+      "cost_basis": "table",
+      "ungoverned_usd": 0.092091,
+      "governed_usd": 0.015456,
+      "ungoverned_tokens": 65111,
+      "governed_tokens": 6826,
+      "governed_pct_of_ungoverned": 16.8,
+      "free_tier": false
+    },
+    {
+      "model": "GPT-5.6 Sol",
+      "vendor": "OpenAI",
+      "cost_basis": "table",
+      "ungoverned_usd": 0.16695,
+      "governed_usd": 0.006805,
+      "ungoverned_tokens": 28980,
+      "governed_tokens": 676,
+      "governed_pct_of_ungoverned": 4.1,
+      "free_tier": false
+    },
+    {
+      "model": "Claude Fable 5",
+      "vendor": "Anthropic",
+      "cost_basis": "table",
+      "ungoverned_usd": 0.38605,
+      "governed_usd": 0.02026,
+      "ungoverned_tokens": 36109,
+      "governed_tokens": 1138,
+      "governed_pct_of_ungoverned": 5.2,
+      "free_tier": false
+    },
+    {
+      "model": "Claude Haiku 4.5",
+      "vendor": "OpenRouter",
+      "cost_basis": "native",
+      "ungoverned_usd": 0.821062,
+      "governed_usd": 0.165951,
+      "ungoverned_tokens": 638866,
+      "governed_tokens": 71631,
+      "governed_pct_of_ungoverned": 20.2,
+      "free_tier": false
+    },
+    {
+      "model": "Llama 4 Scout",
+      "vendor": "OpenRouter",
+      "cost_basis": "native",
+      "ungoverned_usd": 0.107452,
+      "governed_usd": 0.009421,
+      "ungoverned_tokens": 667891,
+      "governed_tokens": 49554,
+      "governed_pct_of_ungoverned": 8.8,
+      "free_tier": false
+    },
+    {
+      "model": "Gemma 4 26B",
+      "vendor": "OpenRouter",
+      "cost_basis": "native",
+      "ungoverned_usd": 0.0214,
+      "governed_usd": 0.003407,
+      "ungoverned_tokens": 289281,
+      "governed_tokens": 30221,
+      "governed_pct_of_ungoverned": 15.9,
+      "free_tier": false
+    },
+    {
+      "model": "Gemma 4 26B",
+      "vendor": "Gemini (native)",
+      "cost_basis": "table",
+      "ungoverned_usd": 0.0,
+      "governed_usd": 0.0,
+      "ungoverned_tokens": 57297,
+      "governed_tokens": 4236,
+      "governed_pct_of_ungoverned": 7.4,
+      "free_tier": true
+    }
+  ]
+}

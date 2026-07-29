@@ -1,0 +1,20 @@
+{
+  "model": "meta-llama/llama-4-scout",
+  "spent_usd": 0.000164,
+  "errors": {
+    "direct": 0,
+    "proxy": 0
+  },
+  "direct": {
+    "n": 12,
+    "p50_s": 0.6787,
+    "p95_s": 0.8632
+  },
+  "proxy": {
+    "n": 12,
+    "p50_s": 0.5188,
+    "p95_s": 0.9847
+  },
+  "added_overhead_p50_ms": -159.9,
+  "L1_pass_under_50ms": true
+}

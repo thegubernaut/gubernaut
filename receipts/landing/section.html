@@ -1,0 +1,53 @@
+<!-- Embeddable receipts section for the Gubernaut landing page.
+     Drop into the Astro page; expects receipts_matrix_chart.svg at the site
+     root (public/). No external dependencies. Byline: Gubernaut Research. -->
+<section class="gcc-receipts" aria-labelledby="gcc-receipts-h">
+  <h2 id="gcc-receipts-h">The bill is the benchmark</h2>
+  <p class="gcc-lede">
+    Agent frameworks retry. A failed tool call retried verbatim, a paraphrased
+    demand cycled endlessly, an escalation spiral — every lap is a full-context
+    call billed at input-token prices, and the agent does not get bored. The
+    failure mode isn't hypothetical; it's a line item.
+  </p>
+  <p class="gcc-lede">
+    Gubernaut is a local, OpenAI-compatible proxy with a deterministic
+    homeostatic controller inside. On a saturating loop the governed arm pays a
+    <strong>single-digit-to-low-twenties percentage</strong> of the ungoverned
+    bill — across every model family we tested, with the hard stop at turn 4.
+  </p>
+  <figure class="gcc-figure">
+    <img src="/receipts_matrix_chart.svg"
+         alt="Governed spend as a percentage of ungoverned across seven model
+              families on the verbatim loop trap — every family lands between
+              4.1% and 20.2%." />
+    <figcaption>
+      Governed spend as % of ungoverned (lower is better). OpenRouter rows are
+      the upstream's own metered cost; the Gemini-native row is free-tier token
+      deltas (†). Every figure is a script output.
+    </figcaption>
+  </figure>
+  <p class="gcc-note">
+    Regulated beats baseline in 15 of 16 generator×judge cells (11/12
+    off-diagonal), 13/16 at p&lt;.05, across four frontier model families.
+    A regulation layer — measured and falsifiable, no cognition claims.
+    DOI: 10.5281/zenodo.21303518.
+  </p>
+</section>
+
+<style>
+  .gcc-receipts { max-width: 820px; margin: 0 auto; padding: 2rem 1rem;
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif; line-height: 1.6; }
+  .gcc-receipts h2 { font-size: 1.8rem; font-weight: 700; margin: 0 0 1rem; }
+  .gcc-lede { font-size: 1.05rem; color: #2a2a30; }
+  .gcc-figure { margin: 1.75rem 0; }
+  .gcc-figure img { width: 100%; height: auto; border: 1px solid #e8e8ee;
+    border-radius: 8px; background: #fff; }
+  .gcc-figure figcaption { font-size: 0.85rem; color: #6b6b76;
+    margin-top: 0.5rem; }
+  .gcc-note { font-size: 0.9rem; color: #6b6b76;
+    border-left: 3px solid #6467f2; padding-left: 0.9rem; }
+  @media (prefers-color-scheme: dark) {
+    .gcc-lede { color: #d6d6de; }
+    .gcc-figure img { border-color: #33333c; }
+  }
+</style>
