@@ -77,8 +77,24 @@ jobs:
           echo "golden traces current"
 
   node:
-    name: node
+    name: node ${{ matrix.node }}
     runs-on: ubuntu-latest
+    # Two different claims, tested separately.
+    #
+    # `engines: >=18` is a promise about the PUBLISHED artifact, which tsup
+    # compiles to plain JS targeting node18. That promise is kept or broken by
+    # dist/, so dist/ is what gets loaded on the floor version.
+    #
+    # The test suite is a different thing: it imports the .ts sources directly
+    # through `node --test`, which needs native type stripping and therefore
+    # Node >= 22.6. The first version of this job ran `npm test` on Node 20 and
+    # failed with ERR_UNKNOWN_FILE_EXTENSION, because it had only ever been run
+    # on a machine with a much newer Node. Raising the floor to hide that would
+    # have weakened a real claim to make a badge green.
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ["20", "24"]
     defaults:
       run:
         working-directory: packages/node
@@ -86,9 +102,22 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: ${{ matrix.node }}
           cache: npm
           cache-dependency-path: packages/node/package-lock.json
       - run: npm ci
-      - run: npm test
-      - run: npm run build --if-present
+      - run: npm run build
+      - name: the published artifact must load on the declared engine floor
+        run: |
+          node -e "import('./dist/index.js').then(m => {
+            const need = ['gccPlugin', 'callGcc', 'loadConfig'];
+            const missing = need.filter(k => !(k in m));
+            if (missing.length) { console.error('missing exports:', missing); process.exit(1); }
+            console.log('dist/index.js loads on node ' + process.version);
+          }).catch(e => { console.error(e.message); process.exit(1); })"
+      - name: require() the CJS build too
+        run: node -e "const m=require('./dist/index.cjs'); if(!m.gccPlugin) process.exit(1); console.log('dist/index.cjs loads')"
+      - name: test suite (needs native type stripping, Node >= 22.6)
+        if: matrix.node != '20'
+        run: npm test
+      - run: npm run typecheck

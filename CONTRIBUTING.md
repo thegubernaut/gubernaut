@@ -37,7 +37,14 @@ cd ../rust && cargo test
 cd ../node && npm install && npm test
 ```
 
-Python 3.10 or newer. A recent stable Rust. Node 20 or newer.
+Python 3.10 or newer. A recent stable Rust.
+
+**Node: two different floors, and they are not the same number.** The published package
+targets **Node 18 or newer**, which is what `engines` says and what CI proves by loading
+`dist/index.js` and `dist/index.cjs` on the floor version. **Running the test suite needs
+Node 22.6 or newer**, because `npm test` points `node --test` at the TypeScript sources
+directly and relies on native type stripping. On an older Node it fails with
+`ERR_UNKNOWN_FILE_EXTENSION` before a single assertion runs.
 
 ## The rules that are particular to this project
 

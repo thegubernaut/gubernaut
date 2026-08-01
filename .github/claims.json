@@ -189,7 +189,10 @@
       "CHANGELOG.md",
       ".github/claims.json",
       ".github/workflows/claims.yml",
-      "tools/claims_check.py"
+      "tools/claims_check.py",
+      "**/dist/**",
+      "**/build/**",
+      "**/*.egg-info/**"
     ],
     "$comment_changelog": "CHANGELOG.md is excluded because it must be able to QUOTE the defect it fixed. A changelog that cannot name $0.1670 cannot record that $0.1670 was corrected. The same applies to the gate's own workflow and checker, which necessarily contain every banned string as data.",
     "curated_docs": [
