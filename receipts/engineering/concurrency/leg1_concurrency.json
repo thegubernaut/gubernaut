@@ -1,0 +1,100 @@
+{
+  "timestamp": "20260721T024307Z",
+  "surface": {
+    "gcc_proxy": "<local>/__init__.py",
+    "gubernaut_sdk": "<local>/__init__.py"
+  },
+  "phase_a_three_frameworks": {
+    "langchain": {
+      "framework": "langchain",
+      "kind": "benign",
+      "any_hardstop": false,
+      "turns": 6
+    },
+    "llamaindex": {
+      "framework": "llamaindex",
+      "kind": "benign",
+      "any_hardstop": false,
+      "turns": 6
+    },
+    "openai": {
+      "framework": "openai",
+      "kind": "hostile",
+      "stop_turn": 4,
+      "posture_trace": [
+        "DEFAULT",
+        "DEFAULT",
+        "REGROUND",
+        "REGROUND"
+      ]
+    },
+    "benign_streams_never_stopped": true,
+    "hostile_stream_stopped_turn": 4,
+    "pass": true
+  },
+  "phase_b_isolation_blast": {
+    "concurrency": 120,
+    "wall_s": 0.406,
+    "drops": 0,
+    "drop_detail": [],
+    "posture_mismatches": 0,
+    "hardstop_mismatches": 0,
+    "benign_wrongly_hardstopped": 0,
+    "hostile_hardstopped": 60,
+    "hostile_total": 60,
+    "responses_missing_headers": 0,
+    "upstream_hits": 60,
+    "expected_upstream_hits": 60,
+    "upstream_hits_match": true,
+    "pass": true
+  },
+  "phase_c_load": {
+    "serial": {
+      "n": 200,
+      "mean_ms": 2.480240998993395,
+      "p50_ms": 2.2683999850414693,
+      "p95_ms": 3.3033000072464347,
+      "p99_ms": 3.9613000117242336,
+      "max_ms": 4.8562999872956425
+    },
+    "concurrent": {
+      "n": 200,
+      "mean_ms": 309.6235839983274,
+      "p50_ms": 295.7023000053596,
+      "p95_ms": 512.2683999943547,
+      "p99_ms": 537.5922999810427,
+      "max_ms": 550.0974000024144
+    },
+    "concurrent_wall_s": 0.594,
+    "serial_total_s": 0.496,
+    "slow_upstream": {
+      "requests": 50,
+      "per_request_delay_s": 0.2,
+      "serial_would_be_s": 10.0,
+      "actual_wall_s": 0.327,
+      "multiplexed": true,
+      "upstream_hits": 50
+    }
+  },
+  "phase_d_failure_injection": {
+    "benign_with_dead_upstream": {
+      "outcome": "APIStatusError",
+      "status": 502
+    },
+    "note_benign": "fail-CLOSED but opaque: a dead upstream surfaces as a bare 500 with no x-gcc-* headers \u2014 customer cannot tell proxy-bug from upstream-down (0.1.0 behaviour, to fix).",
+    "hostile_hardstop_with_dead_upstream": true,
+    "hostile_content_is_gcc": true,
+    "note_hostile": "the spend veto fired with the upstream DOWN \u2014 proves the hard-stop never depends on the upstream call.",
+    "pass": true
+  },
+  "phase_e_live_gemini": {
+    "skipped": "not requested (pass --live)"
+  },
+  "gates": {
+    "A_three_frameworks": true,
+    "B_isolation_blast": true,
+    "C_no_serialization": true,
+    "D_hardstop_upstream_independent": true
+  },
+  "leg1_clear": true
+}

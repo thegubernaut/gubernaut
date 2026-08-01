@@ -1,0 +1,19 @@
+{
+  "mode": "real",
+  "model": "claude-fable-5",
+  "model_tag": "fable",
+  "batteries": [
+    "S3",
+    "S5"
+  ],
+  "arms": [
+    "baseline",
+    "gcc",
+    "promptonly"
+  ],
+  "runs": 3,
+  "spent_usd": 3.50011,
+  "cap": 4.5,
+  "aborted": false,
+  "attempts_file": "attempts_fable_real.jsonl"
+}

@@ -1,0 +1,22 @@
+{
+  "mode": "real",
+  "model": "gpt-5.6-sol",
+  "model_tag": "sol",
+  "batteries": [
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+  ],
+  "arms": [
+    "baseline",
+    "gcc",
+    "promptonly"
+  ],
+  "runs": 3,
+  "spent_usd": 1.246925,
+  "cap": 5.5,
+  "aborted": false,
+  "attempts_file": "attempts_sol_real.jsonl"
+}

@@ -1,0 +1,61 @@
+{
+  "timestamp": "2026-07-24T07:30:53.885Z",
+  "label": "LOCAL EPHEMERAL DEVNET (ganache, chain-id 31337) — not a public testnet",
+  "plugin_source": "@gubernaut/plugin-gcc 0.1.1 from 06_dist_bundle tarball",
+  "contracts": {
+    "oog": "0xe78a0f7e598cc8b0bb87894b0f60dd2a88d6a8ab",
+    "revert": "0x5b1869d9a4c187f2eaa108f3062412ecf0526b24",
+    "invalid": "0xcfeb869f69431e42cdb54a4f4f105c19c080a601"
+  },
+  "config": {
+    "AGENTS_T": 24,
+    "AGENTS_C": 210,
+    "CAP": 40,
+    "onchain_inflight": 40,
+    "gas_limit": "400000",
+    "gas_price_wei": "50000000000",
+    "concurrency_note": "AGENTS_C agents processed concurrently through a bounded on-chain send pool (<=ONCHAIN_INFLIGHT simultaneous RPC) to respect ganache's single HTTP server; the governor-decision isolation at 240-way SIMULTANEOUS is proven separately in Leg 4c."
+  },
+  "phaseA_treasury": {
+    "revert_pattern": "oog (full-burn)",
+    "governed": {
+      "agents": 24,
+      "txs": 72,
+      "all_severed": true,
+      "sever_turns": [
+        4
+      ],
+      "start_wei": "24000000000000000000",
+      "end_wei": "22560000000000000000",
+      "preserved_pct": 94
+    },
+    "ungoverned": {
+      "agents": 24,
+      "txs": 960,
+      "start_wei": "24000000000000000000",
+      "end_wei": "4800000000000000000",
+      "preserved_pct": 20
+    },
+    "governed_end_gt_ungoverned_end": true,
+    "treasury_preserved_ge_90": true
+  },
+  "phaseB_concurrency": {
+    "agents": 210,
+    "revert_patterns": [
+      "oog",
+      "revert",
+      "invalid"
+    ],
+    "concurrency_ms": 41062,
+    "completed": 210,
+    "drops": 0,
+    "all_severed": true,
+    "severed": 210
+  },
+  "host_survival": {
+    "benign_after_prefix": "(mock upstream reply) proceedi",
+    "chain_alive_block": 1665,
+    "survived": true
+  },
+  "leg4b_clear": true
+}

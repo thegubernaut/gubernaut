@@ -1,0 +1,109 @@
+{
+  "$comment": "The claims register for this repository. Derived from the sealed register that governs gubernaut.com (astro-site/src/data/facts.json). Numbers change THERE first, then here. Enforced by tools/claims_check.py on every push and pull request.",
+  "derived_from": "gubernaut.com sealed register, facts.json",
+  "synced": "2026-08-01",
+
+  "banned_strings": {
+    "$comment": "Exact substrings. Case-sensitive. Each carries the reason it is banned, which is printed on failure so the message teaches rather than scolds.",
+    "$0.1670": "The scored flagship value is $0.1669 (raw 0.16695). Never round up.",
+    "0.1670": "The scored flagship value is 0.1669. Never round up.",
+    "8.8%-21.8%": "Does not reconcile with the scored table: 4.1, 5.2 and 7.4 all sit below 8.8. The published range is 4.1% to 20.2%.",
+    "10.5281/zenodo.21303519": "Version DOI. Frozen-record only. Copy uses the concept DOI 10.5281/zenodo.21303518.",
+    "10.5281/zenodo.21355030": "Version DOI. Frozen-record only. Copy uses the concept DOI 10.5281/zenodo.21303518.",
+    "openai.api_base =": "Current OpenAI SDKs ignore this attribute silently, so a client configured that way goes upstream ungoverned with no error. The attribute is base_url. Naming api_base in a warning is fine; assigning it is not. LlamaIndex's own api_base= constructor argument is a different API and is allowed.",
+    "18080": {
+      "why": "Internal test-harness port. The proxy default is 8000 and :18080 never appears in public copy.",
+      "only_in": ["**/*.md"],
+      "$comment_scope": "Prose only. bench/ and the example harnesses bind this port in working code, and renaming a functional port to satisfy a copy rule would be theatre. The rule is about what a reader is told, not what a test binds."
+    },
+    "9/9": "The validation result is 15 of 16 cells. 9/9 has never been a Gubernaut figure.",
+    "test the live runtime": "The demo is a recorded replay. No call to action may imply live inference."
+  },
+
+  "banned_words": {
+    "$comment": "Word-boundary matched, case-insensitive. negated_ok lists substrings that make an occurrence legitimate, which is how the required disclaimer 'Gubernaut is not injection-proof' survives the injection-proof rule. Without that, the gate fails the very sentence it exists to protect.",
+    "guarantee": {"why": "Use 'measured'. Nothing here is guaranteed.", "negated_ok": ["not a structural guarantee", "rather than a structural guarantee", "do not depend on"]},
+    "flawless": {"why": "Overclaim."},
+    "proven": {"why": "Use 'measured' or 'verified'. Note: 'provenance' contains 'proven' and is fine, which is why this is word-boundary matched."},
+    "eliminates": {"why": "Use 'reduces' or 'reversed'."},
+    "sentient": {"why": "No consciousness claims. Ever.", "negated_ok": ["no consciousness", "not sentient", "nor sentient"]},
+    "sentience": {"why": "No consciousness claims. Ever.", "negated_ok": ["no consciousness", "or sentience is claimed", "no sentience"]},
+    "conscious": {"why": "No consciousness claims. Ever.", "negated_ok": ["no consciousness", "not a consciousness claim", "no cognition or consciousness"]},
+    "consciousness": {"why": "No consciousness claims. Ever.", "negated_ok": ["no consciousness", "not a consciousness claim", "no cognition or consciousness"]},
+    "revolutionary": {"why": "Marketing vocabulary."},
+    "unhackable": {"why": "Overclaim, and false."},
+    "bulletproof": {"why": "Overclaim."},
+    "injection-proof": {"why": "Injection resistance is claimed for the CONTROLLER only. The arbiter reads raw text by necessity.", "negated_ok": ["not injection-proof", "never claim", "is not injection"]},
+    "100% safe": {"why": "Overclaim."},
+    "zero risk": {"why": "Overclaim."},
+    "AGI achieved": {"why": "Not a claim this project makes."}
+  },
+
+  "required_together": [
+    {
+      "$comment": "The headline may never travel without its significance count and its null. This is the single most important rule in the file.",
+      "if_any": ["15/16", "15 of 16"],
+      "then_all": ["13/16"],
+      "then_any": ["-0.04", "null"],
+      "why": "Any statement of 15/16 must also carry 13/16 at p<.05 and show the null cell. Never 'all', never rounded up."
+    }
+  ],
+
+  "social_proof_patterns": {
+    "$comment": "No reviews, testimonials, logos, user counts, download counts or star ratings exist for this project. None are ever fabricated, including as placeholder. These patterns catch the shapes.",
+    "patterns": [
+      "\\b(?:trusted|used) by [0-9,]+",
+      "\\b[0-9][0-9,.]*[kKmM]?\\+? (?:happy )?(?:users|customers|developers|teams|companies) (?:trust|use|love|rely)",
+      "\\b[0-9][0-9,.]*[kKmM]?\\+? (?:github )?stars\\b",
+      "\\b[0-9][0-9,.]*[kKmM]?\\+? downloads\\b",
+      "\\b[0-9](?:\\.[0-9])?/5 stars?\\b",
+      "\\btestimonials?\\b"
+    ],
+    "negated_ok": [
+      "no customer review",
+      "no reviews, testimonial",
+      "never fabricate",
+      "none exist",
+      "no fabricated social proof"
+    ],
+    "$comment_negation": "The rule must not fail the sentence that states the rule. docs/LIMITS.md says 'No customer reviews, testimonials, logos, user counts...' and that is the disclaimer, not a violation of it.",
+    "why": "Rule 8. There is no exception path, including placeholder text."
+  },
+
+  "dash_ban": {
+    "$comment": "Em-dash and en-dash are banned typography across Gubernaut surfaces. Use a period, comma, colon or middot. Ranges read '4.1% to 20.2%'. Scoped to the curated documentation surface: raw measured outputs under receipts/telemetry/ are data rather than copy, and vendored files are not ours to restyle.",
+    "chars": ["—", "–"],
+    "scope": "curated_docs"
+  },
+
+  "scope": {
+    "$comment": "check_all runs the number, vocabulary, pairing and social-proof rules. curated_docs additionally runs the dash ban.",
+    "include_globs": ["**/*.md", "**/*.py", "**/*.rs", "**/*.ts", "**/*.toml", "**/*.yml", "**/*.yaml"],
+    "exclude_globs": [
+      ".git/**",
+      "**/node_modules/**",
+      "**/package-lock.json",
+      "**/Cargo.lock",
+      "**/target/**",
+      "**/.venv/**",
+      "**/__pycache__/**",
+      "LICENSE",
+      "**/LICENSE",
+      "CHANGELOG.md",
+      ".github/claims.json",
+      ".github/workflows/claims.yml",
+      "tools/claims_check.py"
+    ],
+    "$comment_changelog": "CHANGELOG.md is excluded because it must be able to QUOTE the defect it fixed. A changelog that cannot name $0.1670 cannot record that $0.1670 was corrected. The same applies to the gate's own workflow and checker, which necessarily contain every banned string as data.",
+    "curated_docs": [
+      "README.md",
+      "CONTRIBUTING.md",
+      "SECURITY.md",
+      "CODE_OF_CONDUCT.md",
+      "docs/*.md",
+      "examples/README.md",
+      "receipts/README.md",
+      "packages/*/README.md"
+    ]
+  }
+}

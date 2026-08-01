@@ -1,0 +1,9 @@
+﻿{
+  "verdict": "PASS",
+  "elizaCoreReal": true,
+  "modelKey": "TEXT_LARGE",
+  "stopTurn": 4,
+  "resolved": "file:///E:/AA%20-%20Gubernaut/01_dev_sandboxes/clean_room_verification/node_customer/node_modules/@gubernaut/plugin-gcc/dist/index.js",
+  "proxy": "http://127.0.0.1:18091/v1",
+  "model": "gemma-4-26b-a4b-it"
+}

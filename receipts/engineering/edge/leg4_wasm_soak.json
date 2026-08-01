@@ -1,0 +1,95 @@
+{
+  "timestamp": "2026-07-21T02:50:28.628Z",
+  "wasm": "gcc_core-0.1.1.wasm",
+  "wasm_bytes": 17082,
+  "abi_version": 1,
+  "export_names": [
+    "memory",
+    "gcc_abi_version",
+    "gcc_last_arousal",
+    "gcc_last_equilibrium",
+    "gcc_last_perseveration",
+    "gcc_last_recovery",
+    "gcc_last_temperature_max",
+    "gcc_tick"
+  ],
+  "scenarios": 8,
+  "steps_per_pass": 73,
+  "passes": 69,
+  "ticks": 5037,
+  "latency_ns": {
+    "first500": {
+      "n": 500,
+      "mean_ns": 249.8,
+      "p50_ns": 200,
+      "p95_ns": 200,
+      "p99_ns": 1400,
+      "max_ns": 16600
+    },
+    "last500": {
+      "n": 500,
+      "mean_ns": 288.4,
+      "p50_ns": 200,
+      "p95_ns": 300,
+      "p99_ns": 300,
+      "max_ns": 52200
+    },
+    "overall": {
+      "n": 5037,
+      "mean_ns": 181.2388326384753,
+      "p50_ns": 200,
+      "p95_ns": 300,
+      "p99_ns": 300,
+      "max_ns": 52200
+    },
+    "p99_ratio": 0.21428571428571427
+  },
+  "memory": {
+    "wasm_bytes_start": 1114112,
+    "wasm_bytes_end": 1114112,
+    "samples": 21,
+    "rss_start": 50470912,
+    "rss_end": 54775808,
+    "wasm_memory_constant": true
+  },
+  "drift": {
+    "windowed_p50_ns": [
+      200,
+      200,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      200,
+      200,
+      100
+    ],
+    "ols_slope_ns_per_window": -0.3007518796992481,
+    "total_drift_ns": -5.7142857142857135
+  },
+  "correctness": {
+    "divergences": 0,
+    "max_float_diff": 0,
+    "divergence_samples": []
+  },
+  "gates": {
+    "exports_nonempty": true,
+    "boundary_rejects": true,
+    "latency_ratio_le_1_25": true,
+    "wasm_memory_flat": true,
+    "windowed_p50_slope_flat": true,
+    "zero_golden_divergence": true
+  },
+  "leg4_clear": true
+}

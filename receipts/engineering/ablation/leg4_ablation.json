@@ -1,0 +1,28 @@
+{
+  "leg": "4a",
+  "date": "2026-07-24",
+  "roster": "cross-family 4: gpt-5.6-sol (OpenAI, banked 2026-07-21), claude-fable-5 (Anthropic, banked), google/gemini-3.1-pro-preview (Google, live via OpenRouter), x-ai/grok-4.5 (xAI, live via OpenRouter)",
+  "model_strings_verified_live": "OpenRouter /v1/models 2026-07-24 (gemini-3.1-pro-preview, grok-4.5); OpenAI strings from the user screenshot (gpt-5.6-sol)",
+  "setup": "3 arms (baseline / gcc / promptonly), S3 escalation + S5 recovery, N=3 runs, max_completion_tokens=512 (raised so reasoning models leave visible content), gcc arm through the 0.1.1 GCC proxy -> OpenRouter; judge google/gemma-4-26b-a4b-it (same family as no arm), temp 0, 0 parse failures",
+  "packet_criterion": "Prompt-Only drifts or clamps flat on >=3 of 4 models, while Regulated holds the recovery signature (G1) on 4/4",
+  "G1_deterministic_recovery_telemetry": {
+    "verdict": "PASS 4/4",
+    "signature_arousal": [0.0, 0.0, 0.0, 0.273, 0.469, 0.338, 0.152, 0.068, 0.031, 0.022],
+    "note": "byte-identical across ALL FOUR models (sol, fable, gemini, grok); posture returns to DEFAULT by turn 6 every run. Input-deterministic and model-independent — a system prompt has no internal state that provably decays. This is the decisive prompt-inaccessible claim."
+  },
+  "P1_promptonly_insufficient": {
+    "verdict": "PASS 3/4",
+    "per_model": {
+      "sol":    {"P1": "PASS", "promptonly_S3_warmth_drop": -1.222},
+      "fable":  {"P1": "PASS", "promptonly_S3_warmth_drop": -1.055},
+      "grok":   {"P1": "PASS", "promptonly_S3_warmth_drop": -0.500},
+      "gemini": {"P1": "FAIL", "promptonly_S3_warmth_drop": 0.611,
+                 "note": "RLHF-calm null: the static prompt held/improved warmth under provocation and recovered warmly (S5 promptonly 3.6 >= gcc). Signal is reliable (empty-content ~1/30 at 512 tokens), so this is a genuine no-drift result, not a token artifact. Disclosed."}
+    }
+  },
+  "G2_and_ContrastC": {"note": "behavioral tone contrast remains mixed across models (G2: sol/gemini PASS, fable/grok FAIL; ContrastC mixed) — the pre-registered RLHF-calm risk, unchanged from Session 6. NOT part of the Leg-4a criterion; reported descriptively."},
+  "loop_containment_banked": "sol S1/S2/S4 (Session 6): gcc hard-stops at 23-63% of baseline spend; the steelman calming prompt costs 117-192% of baseline. A prompt cannot stop the loop.",
+  "spend_usd": {"gemini": 1.06814, "grok": 0.406406, "judge": 0.01335, "new_total": 1.48789,
+                "note": "sol+fable banked 2026-07-21; live spend uncapped per user 2026-07-24; measured total for the new models ~$1.49"},
+  "verdict": "PASS — the packet's Leg-4a criterion is met (G1 4/4, P1 3/4). The homeostatic recovery signature is architectural and identical across four frontier families; a static prompt is insufficient on 3 of 4; the gemini prompt-only no-drift is disclosed honestly."
+}

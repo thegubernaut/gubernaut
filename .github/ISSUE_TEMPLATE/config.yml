@@ -1,0 +1,14 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/thegubernaut/gubernaut/security/advisories/new
+    about: Fail-opens, boundary crossings, credential leaks and hard-stop bypasses go here, privately. Never in a public issue.
+  - name: Questions and discussion
+    url: https://github.com/thegubernaut/gubernaut/discussions
+    about: Anything that is not a bug, an integration or a reproduction report.
+  - name: The paper and the validation data
+    url: https://github.com/thegubernaut/Gubernaut_Validation
+    about: The cross-family validation matrix, the transcripts, the judge panels and the scoring scripts live in their own repository.
+  - name: Known limits
+    url: https://github.com/thegubernaut/gubernaut/blob/main/docs/LIMITS.md
+    about: The injection scope, the sensor's recall gap, the three latency scopes and the null cell. Worth reading before filing.

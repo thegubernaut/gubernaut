@@ -1,0 +1,11 @@
+{
+  "upstream": "http://127.0.0.1:18095",
+  "model": "mock-model",
+  "key_env": null,
+  "proxy_base": "http://127.0.0.1:52208/v1",
+  "benign_ok": true,
+  "benign_posture": "DEFAULT",
+  "hard_stop_turn": 4,
+  "post_stop_benign_ok": true,
+  "verdict": "PASS"
+}

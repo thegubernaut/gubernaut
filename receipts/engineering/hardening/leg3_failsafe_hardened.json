@@ -1,0 +1,123 @@
+{
+  "timestamp": "20260721T024558Z",
+  "round": "hardened",
+  "wheel": "<local>/__init__.py",
+  "group_a_proxy_failopen": [
+    {
+      "case": "A1_benign_chat_control",
+      "route": "POST /v1/chat/completions",
+      "status": 200,
+      "error": null,
+      "canary_hits": 1,
+      "should_block": false,
+      "fail_open": false,
+      "verdict": "governed passthrough (expected)",
+      "note": "baseline: governed traffic reaches upstream"
+    },
+    {
+      "case": "A2_hardstop_loop",
+      "route": "POST /v1/chat/completions",
+      "status": 200,
+      "error": null,
+      "canary_hits": 0,
+      "should_block": true,
+      "fail_open": false,
+      "verdict": "blocked (fail-closed)",
+      "note": "spend veto: hard-stopped loop must not touch upstream"
+    },
+    {
+      "case": "A3_responses_route",
+      "route": "POST /v1/responses",
+      "status": 403,
+      "error": null,
+      "canary_hits": 0,
+      "should_block": true,
+      "fail_open": false,
+      "verdict": "blocked (fail-closed)",
+      "note": "OpenAI Responses API \u2014 must be governed, not blindly forwarded"
+    },
+    {
+      "case": "A4_completions_route",
+      "route": "POST /v1/completions",
+      "status": 403,
+      "error": null,
+      "canary_hits": 0,
+      "should_block": true,
+      "fail_open": false,
+      "verdict": "blocked (fail-closed)",
+      "note": "legacy completions \u2014 must be governed, not blindly forwarded"
+    },
+    {
+      "case": "A5_malformed_messages",
+      "route": "POST /v1/chat/completions",
+      "status": 400,
+      "error": null,
+      "canary_hits": 0,
+      "should_block": true,
+      "fail_open": false,
+      "verdict": "blocked (fail-closed)",
+      "note": "unparseable-as-chat body must be fail-closed, not forwarded raw"
+    },
+    {
+      "case": "A6_typo_bool_hardstop",
+      "route": "boot",
+      "booted": false,
+      "should_block": true,
+      "fail_open": false,
+      "verdict": "REJECTED at boot (fail-closed)",
+      "note": "hardened: a malformed bool must abort startup, not disable the veto"
+    },
+    {
+      "case": "A7_pythonoptimize_assert_strip",
+      "route": "POST /v1/chat/completions",
+      "status": 400,
+      "canary_hits": 0,
+      "should_block": true,
+      "fail_open": false,
+      "verdict": "no upstream (assert stripped \u2192 500 crash, fail-closed-ish)",
+      "note": "deployment-mode-dependent: -O strips the bare assert at proxy.py:107"
+    }
+  ],
+  "group_b_python_sdk": [
+    {
+      "case": "B1_py_sdk_dead_proxy",
+      "outcome": "APIConnectionError (fail-closed): Connection error.",
+      "canary_hits": 0,
+      "fail_open": false,
+      "verdict": "fail-CLOSED (client raised, no upstream reached)",
+      "note": "openai SDK at a dead proxy: raises, never falls back to a vendor API"
+    }
+  ],
+  "group_b_node_plugin": {
+    "group": "node_plugin_failsafe",
+    "plugin_source": "tarball",
+    "cases": [
+      {
+        "case": "B3_node_dead_proxy",
+        "error": "GubernautConnectionError: [plugin-gcc] GCC proxy unreachable at http://127.0.0.1:19998",
+        "verdict": "fail-CLOSED via typed GubernautConnectionError (no vendor fallback)",
+        "fail_open": false
+      },
+      {
+        "case": "B4_node_malformed_url",
+        "error": "GubernautConfigError: [plugin-gcc] GCC_PROXY_URL is not a valid URL: \"not-a-url\"",
+        "verdict": "rejected at init() via typed GubernautConfigError (repaired guard)",
+        "fail_open": false
+      },
+      {
+        "case": "B5_node_stalled_proxy",
+        "error": "GubernautTimeoutError @829ms",
+        "verdict": "fail-CLOSED at 829ms via typed GubernautTimeoutError (GCC_TIMEOUT_MS honoured)",
+        "fail_open": false
+      }
+    ],
+    "fail_open_cases": []
+  },
+  "summary": {
+    "group_a_leaks": [],
+    "group_b_python_leaks": [],
+    "group_b_node_leaks": [],
+    "total_failopen": 0
+  },
+  "hardened_gate_pass": true
+}

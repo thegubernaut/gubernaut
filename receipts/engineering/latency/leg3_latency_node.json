@@ -1,0 +1,78 @@
+{
+  "leg": "3",
+  "runtime": "node v26.5.0",
+  "hosts": [
+    {
+      "host": "node-main",
+      "abi": 1,
+      "exportsOk": true,
+      "exportNames": [
+        "memory",
+        "gcc_abi_version",
+        "gcc_last_arousal",
+        "gcc_last_equilibrium",
+        "gcc_last_perseveration",
+        "gcc_last_recovery",
+        "gcc_last_temperature_max",
+        "gcc_tick"
+      ],
+      "coldStartNs": 15943200,
+      "latency": {
+        "n": 100000,
+        "mean_ns": 176.964,
+        "p50_ns": 100,
+        "p95_ns": 300,
+        "p99_ns": 400,
+        "p999_ns": 2000,
+        "max_ns": 196100
+      },
+      "soak": {
+        "ticks": 10000,
+        "scenarios": 8,
+        "divergences": 0,
+        "mem_start_bytes": 1114112,
+        "mem_end_bytes": 1114112,
+        "mem_flat": true,
+        "first_window_p99_ns": 26000,
+        "last_window_p99_ns": 700,
+        "p99_drift_ratio": 0.026923076923076925
+      }
+    },
+    {
+      "host": "node-worker_threads",
+      "abi": 1,
+      "exportsOk": true,
+      "exportNames": [
+        "memory",
+        "gcc_abi_version",
+        "gcc_last_arousal",
+        "gcc_last_equilibrium",
+        "gcc_last_perseveration",
+        "gcc_last_recovery",
+        "gcc_last_temperature_max",
+        "gcc_tick"
+      ],
+      "coldStartNs": 384500,
+      "latency": {
+        "n": 100000,
+        "mean_ns": 118.968,
+        "p50_ns": 100,
+        "p95_ns": 200,
+        "p99_ns": 200,
+        "p999_ns": 1400,
+        "max_ns": 280700
+      },
+      "soak": {
+        "ticks": 10000,
+        "scenarios": 8,
+        "divergences": 0,
+        "mem_start_bytes": 1114112,
+        "mem_end_bytes": 1114112,
+        "mem_flat": true,
+        "first_window_p99_ns": 6400,
+        "last_window_p99_ns": 300,
+        "p99_drift_ratio": 0.046875
+      }
+    }
+  ]
+}

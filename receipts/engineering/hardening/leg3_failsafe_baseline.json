@@ -1,0 +1,128 @@
+{
+  "timestamp": "20260721T021341Z",
+  "round": "baseline",
+  "wheel": "<local>/__init__.py",
+  "group_a_proxy_failopen": [
+    {
+      "case": "A1_benign_chat_control",
+      "route": "POST /v1/chat/completions",
+      "status": 200,
+      "error": null,
+      "canary_hits": 1,
+      "should_block": false,
+      "fail_open": false,
+      "verdict": "governed passthrough (expected)",
+      "note": "baseline: governed traffic reaches upstream"
+    },
+    {
+      "case": "A2_hardstop_loop",
+      "route": "POST /v1/chat/completions",
+      "status": 200,
+      "error": null,
+      "canary_hits": 0,
+      "should_block": true,
+      "fail_open": false,
+      "verdict": "blocked (fail-closed)",
+      "note": "spend veto: hard-stopped loop must not touch upstream"
+    },
+    {
+      "case": "A3_responses_route",
+      "route": "POST /v1/responses",
+      "status": 200,
+      "error": null,
+      "canary_hits": 1,
+      "should_block": true,
+      "fail_open": true,
+      "verdict": "FAIL-OPEN LEAK",
+      "note": "OpenAI Responses API \u2014 must be governed, not blindly forwarded"
+    },
+    {
+      "case": "A4_completions_route",
+      "route": "POST /v1/completions",
+      "status": 200,
+      "error": null,
+      "canary_hits": 1,
+      "should_block": true,
+      "fail_open": true,
+      "verdict": "FAIL-OPEN LEAK",
+      "note": "legacy completions \u2014 must be governed, not blindly forwarded"
+    },
+    {
+      "case": "A5_malformed_messages",
+      "route": "POST /v1/chat/completions",
+      "status": 200,
+      "error": null,
+      "canary_hits": 1,
+      "should_block": true,
+      "fail_open": true,
+      "verdict": "FAIL-OPEN LEAK",
+      "note": "unparseable-as-chat body must be fail-closed, not forwarded raw"
+    },
+    {
+      "case": "A6_typo_bool_hardstop",
+      "route": "POST /v1/chat/completions",
+      "canary_hits": 1,
+      "should_block": true,
+      "fail_open": true,
+      "verdict": "FAIL-OPEN: 'disabled' typo silently turned off the veto \u2014 hostile loop reached upstream",
+      "note": "permissive bool parser: anything not in {1,true,yes,on} => False"
+    },
+    {
+      "case": "A7_pythonoptimize_assert_strip",
+      "route": "POST /v1/chat/completions",
+      "status": "ReadTimeout",
+      "canary_hits": 0,
+      "should_block": true,
+      "fail_open": false,
+      "verdict": "no upstream (assert stripped \u2192 500 crash, fail-closed-ish)",
+      "note": "deployment-mode-dependent: -O strips the bare assert at proxy.py:107"
+    }
+  ],
+  "group_b_python_sdk": [
+    {
+      "case": "B1_py_sdk_dead_proxy",
+      "outcome": "APIConnectionError (fail-closed): Connection error.",
+      "canary_hits": 0,
+      "fail_open": false,
+      "verdict": "fail-CLOSED (client raised, no upstream reached)",
+      "note": "openai SDK at a dead proxy: raises, never falls back to a vendor API"
+    }
+  ],
+  "group_b_node_plugin": {
+    "group": "node_plugin_failsafe",
+    "plugin_source": "tarball",
+    "cases": [
+      {
+        "case": "B3_node_dead_proxy",
+        "error": "TypeError: fetch failed",
+        "verdict": "fail-CLOSED (throws at dead proxy; no vendor fallback)",
+        "fail_open": false
+      },
+      {
+        "case": "B4_node_empty_url_guard",
+        "error": "TypeError: fetch failed",
+        "verdict": "defaults to loopback:8000 then throws (dead GCC_PROXY_URL guard; fail-closed but not the intended config error)",
+        "fail_open": false
+      },
+      {
+        "case": "B5_node_stalled_proxy",
+        "error": "hung 3005ms",
+        "verdict": "HUNG >3s (no fetch timeout \u00e2\u20ac\u201d availability defect, to fix in 0.1.1)",
+        "fail_open": false
+      }
+    ],
+    "fail_open_cases": []
+  },
+  "summary": {
+    "group_a_leaks": [
+      "A3_responses_route",
+      "A4_completions_route",
+      "A5_malformed_messages",
+      "A6_typo_bool_hardstop"
+    ],
+    "group_b_python_leaks": [],
+    "group_b_node_leaks": [],
+    "total_failopen": 4
+  },
+  "hardened_gate_pass": false
+}

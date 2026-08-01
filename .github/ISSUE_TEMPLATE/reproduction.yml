@@ -1,0 +1,83 @@
+name: Reproduction report
+description: You re-ran a published measurement. Tell us what you got, matching or not.
+title: "[repro] "
+labels: ["reproduction"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for running it.
+
+        **A result that disagrees with ours is more useful than one that agrees.** The
+        controller is input-deterministic, so a genuine mismatch means either a bug on our
+        side or an environment difference worth documenting. Either way we want it.
+
+        The procedure is [docs/REPRODUCE.md](../blob/main/docs/REPRODUCE.md).
+
+  - type: dropdown
+    id: level
+    attributes:
+      label: Which level did you run?
+      options:
+        - "Level 1: controller test suite (pytest)"
+        - "Level 2: cross-language parity (cargo test)"
+        - "Level 3: the hard stop against the mock upstream"
+        - "Level 4: the receipts battery against a real upstream"
+        - "The validation matrix (Gubernaut_Validation repo)"
+        - "Something else"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: outcome
+    attributes:
+      label: Did it match?
+      options:
+        - "Matched"
+        - "Did not match"
+        - "Partially matched"
+        - "Could not complete the run"
+    validations:
+      required: true
+
+  - type: textarea
+    id: got
+    attributes:
+      label: What you got
+      description: Paste the raw output rather than a summary of it. If a posture or a turn number differed from the documented one, say which.
+      render: shell
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Package version
+      placeholder: "gubernaut-sdk 1.0.0 / gcc-core 1.0.0 / @gubernaut/plugin-gcc 1.0.0"
+    validations:
+      required: true
+
+  - type: input
+    id: platform
+    attributes:
+      label: Platform and runtime version
+      placeholder: "Ubuntu 24.04, Python 3.12.3 / rustc 1.83 / Node 20.11"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: config
+    attributes:
+      label: Did you change GCCConfig?
+      description: Every published number was measured with the defaults. A changed threshold means the published figures no longer describe your run, which is fine as long as we know.
+      options:
+        - "No, defaults"
+        - "Yes, and the changes are in the output above"
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else
+      description: Optional. Whether we may credit you by name or handle if this is written up, and how you would like to be credited.

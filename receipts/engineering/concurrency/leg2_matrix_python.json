@@ -1,0 +1,42 @@
+{
+  "leg": "2a",
+  "artifact": "<local>/__init__.py",
+  "base_url": "http://127.0.0.1:60617/v1",
+  "frameworks": {
+    "openai_sdk": {
+      "installed": "2.48.0",
+      "benign_ok": true,
+      "hard_stop": true,
+      "hard_stop_header": "true",
+      "failed_closed": true,
+      "fail_error": "APIConnectionError",
+      "green": true
+    },
+    "langchain": {
+      "installed": "1.4.1",
+      "benign_ok": true,
+      "hard_stop": true,
+      "failed_closed": true,
+      "fail_error": "APIConnectionError",
+      "green": true
+    },
+    "llamaindex": {
+      "installed": "n/a",
+      "benign_ok": true,
+      "hard_stop": true,
+      "failed_closed": true,
+      "fail_error": "APIConnectionError",
+      "green": true
+    },
+    "autogen": {
+      "installed": "0.7.5",
+      "benign_ok": true,
+      "hard_stop": true,
+      "failed_closed": true,
+      "fail_error": "APIConnectionError",
+      "green": true
+    }
+  },
+  "python_frameworks_green": 4,
+  "note": "ElizaOS (5th framework) verified separately via matrix_node.mjs (Node, from the 0.1.1 tgz)."
+}

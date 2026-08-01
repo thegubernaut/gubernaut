@@ -1,0 +1,20 @@
+{
+  "leg": "3",
+  "component": "python_proxy",
+  "e2e_http_overhead": {
+    "n": 3000,
+    "p50_ms": 1.1820000363513827,
+    "p95_ms": 2.008700044825673,
+    "p99_ms": 2.4198999162763357,
+    "max_ms": 24.094699998386204,
+    "mean_ms": 1.3360069668463743
+  },
+  "meta_decision_python": {
+    "n": 20000,
+    "p50_ns": 15100,
+    "p99_ns": 30400,
+    "mean_ns": 15740.54
+  },
+  "gate_e2e_p50_lt_5ms": true,
+  "gate_e2e_p99_lt_20ms": true
+}

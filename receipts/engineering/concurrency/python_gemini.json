@@ -1,0 +1,11 @@
+{
+  "upstream": "https://generativelanguage.googleapis.com/v1beta/openai",
+  "model": "gemma-4-26b-a4b-it",
+  "key_env": "GCC_CLEANROOM_KEY",
+  "proxy_base": "http://127.0.0.1:64361/v1",
+  "benign_ok": true,
+  "benign_posture": "DEFAULT",
+  "hard_stop_turn": 4,
+  "post_stop_benign_ok": true,
+  "verdict": "PASS"
+}

@@ -1,0 +1,15 @@
+{
+  "leg": "4c",
+  "concurrency": 240,
+  "responses": 240,
+  "drops": 0,
+  "non_200": 0,
+  "posture_mismatches": 0,
+  "mismatch_samples": [],
+  "upstream_hits": 120,
+  "expected_upstream_hits": 120,
+  "upstream_matches_nonhardstop": true,
+  "contamination": 0,
+  "drop_exceptions": [],
+  "PASS": true
+}

@@ -1,0 +1,48 @@
+{
+  "leg": "2",
+  "date": "2026-07-24",
+  "2a_framework_matrix": {
+    "install_source": "built artifacts only (wheel / tgz); public registries for third-party deps",
+    "frameworks_green": "5/5",
+    "frameworks": {
+      "openai_sdk": {"version": "2.48.0", "benign_ok": true, "hard_stop": true, "hard_stop_header": "true", "failed_closed": true, "fail_error": "APIConnectionError"},
+      "langchain": {"version": "langchain-openai 1.4.1", "benign_ok": true, "hard_stop": true, "failed_closed": true, "fail_error": "APIConnectionError"},
+      "llamaindex": {"version": "llama-index-llms-openai-like 0.7.2", "client": "OpenAILike", "benign_ok": true, "hard_stop": true, "failed_closed": true, "fail_error": "APIConnectionError"},
+      "autogen": {"version": "autogen-ext 0.7.5", "client": "OpenAIChatCompletionClient", "benign_ok": true, "hard_stop": true, "failed_closed": true, "fail_error": "APIConnectionError"},
+      "elizaos": {"core": "@elizaos/core 1.7.2", "elizaCoreReal": true, "modelKey": "TEXT_LARGE", "stopTurn": 4, "resolved_dist": true, "from_tarball": "gubernaut-plugin-gcc-0.1.1.tgz"}
+    },
+    "note": "each framework: one base-URL change -> benign flows through, saturated loop HARD-STOPS (governed refusal), dead-proxy raises (fail-closed). Node/ElizaOS verified against a live mock-backed proxy on :18091."
+  },
+  "2b_packaging_integrity": {
+    "license_files_added": {
+      "python": "02_staging_products/gcc_local_proxy/python/LICENSE",
+      "core": "02_staging_products/gcc_local_proxy/core/LICENSE",
+      "eliza": "01_dev_sandboxes/eliza_gcc_plugin/LICENSE",
+      "sha256_prefix_all_three": "c866ac6b808a274d",
+      "text": "Apache-2.0 full terms + appendix + Copyright 2026 Gubernaut Research"
+    },
+    "concept_doi": {
+      "value": "10.5281/zenodo.21303518",
+      "provenance": "matches the frozen release CITATION.cff (03_shipped_releases/zenodo_v1.0.0_repo/CITATION.cff) which uses ...518 as its citation DOI; version DOI ...519 retired from package-facing citations",
+      "in_python_readme": true, "in_core_readme": true, "in_eliza_readme": true,
+      "in_pyproject_urls": true, "in_cargo_metadata": true, "in_wheel_METADATA": true
+    },
+    "python": {
+      "twine_check": "PASSED (wheel + sdist)",
+      "license_in_wheel": "gubernaut_sdk-0.1.1.dist-info/licenses/LICENSE",
+      "license_field": "License: Apache-2.0 ; License-File: LICENSE"
+    },
+    "rust": {
+      "cargo_package": "OK (8 files, LICENSE + README + Cargo.toml included)",
+      "publish_false_guard": "cargo publish --dry-run REFUSED: 'gcc-core cannot be published. package.publish must be set to true...'"
+    },
+    "node": {
+      "npm_pack_dry_run": "7 files incl LICENSE (11.3kB) + dist/* + README + package.json",
+      "files_field": ["dist", "LICENSE"]
+    },
+    "secret_scan": {"sources_scanned": 3, "hits": 0,
+      "patterns": "sk-*, sk-ant-, sk-or-v1, AIza*, xai-*, ghp_*, PRIVATE KEY blocks"},
+    "sha256sums_note": "canonical SHA256SUMS.txt regeneration happens at the 1.0.0 staging (verdict step), where the LICENSE+DOI-bearing artifacts are rebuilt into 06_dist_bundle/."
+  },
+  "verdict": "PASS — 5 frameworks green from the artifacts; packaging is publish-ready (LICENSE + concept DOI present in all three, twine PASSED, cargo publish blocked by guard, npm packs LICENSE, 0 secrets)."
+}

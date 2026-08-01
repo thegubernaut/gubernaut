@@ -1,0 +1,19 @@
+{
+  "mode": "real",
+  "model": "x-ai/grok-4.5",
+  "model_tag": "grok",
+  "batteries": [
+    "S3",
+    "S5"
+  ],
+  "arms": [
+    "baseline",
+    "gcc",
+    "promptonly"
+  ],
+  "runs": 3,
+  "spent_usd": 0.406406,
+  "cap": 20.0,
+  "aborted": false,
+  "attempts_file": "attempts_grok_real.jsonl"
+}

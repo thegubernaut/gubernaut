@@ -1,0 +1,13 @@
+{
+  "name": "onchain-governor-testnet",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Leg 2 — local ephemeral EVM devnet live-fire for @gubernaut/plugin-gcc. LOCAL DEVNET ONLY: no public network, no wallet creation, no faucet, no value at risk.",
+  "dependencies": {
+    "@elizaos/core": "^1.7.2",
+    "@gubernaut/plugin-gcc": "file:../../06_dist_bundle/node/gubernaut-plugin-gcc-0.1.1.tgz",
+    "ganache": "^7.9.2",
+    "viem": "^2.55.4"
+  }
+}

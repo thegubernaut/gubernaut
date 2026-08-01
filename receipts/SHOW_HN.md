@@ -57,7 +57,7 @@ upstream. The spend delta IS the measurement.
 **Flagship showcases** (one run each, 25-attempt verbatim loop, 1024-token
 completions):
 
-- gpt-5.6-sol: OFF **$0.1670** vs ON **$0.0068** — 4.1% of the ungoverned
+- gpt-5.6-sol: OFF **$0.1669** vs ON **$0.0068**, 4.1% of the ungoverned
   bill
 - claude-fable-5, via Anthropic's OpenAI-compat endpoint: OFF **$0.3861**
   vs ON **$0.0203** — 5.2%, with the same turn-3/turn-4 reaction on a
@@ -84,8 +84,7 @@ model families; OpenRouter figures are the upstream's *own* metered
 | Gemma 4 26B | Gemini (native, free tier) | injection | 65,074 tok | 10,813 tok | **16.6%†** |
 
 Every family lands in the same place: on a saturating loop the governed arm
-pays a single-digit-to-low-twenties fraction of the ungoverned bill, with
-the hard stop at turn 4. † Gemma on Google's native API is free-tier only,
+pays 4.1% to 20.2% of the ungoverned bill, with the hard stop at turn 4. † Gemma on Google's native API is free-tier only,
 so that row is token deltas, not dollars.
 
 Two honest notes from the cross-checks. We compared OpenRouter's own metered
@@ -112,7 +111,7 @@ Where the mechanism is posture actuation rather than hard-stop
 spend descriptively instead of claiming interception — the honest split
 is in the pre-registration.
 
-The deciding core is also ported to Rust and proven bit-exact against the
+The deciding core is also ported to Rust and verified bit-exact against the
 Python reference (73 value-exact golden steps; wasm32 target builds).
 Validation behind the regulation layer: regulated beats baseline in 15 of
 16 generator×judge cells (11/12 off-diagonal), 13/16 at p<.05, across four

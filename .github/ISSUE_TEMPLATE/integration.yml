@@ -1,0 +1,41 @@
+name: Integration
+description: A framework, runtime or client you want governed, or one that does not work.
+title: "[integration] "
+labels: ["integration"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Gubernaut is an OpenAI-compatible proxy, so **anything that lets you set a base URL
+        works already**. Worked examples for OpenAI SDK, LangChain, LlamaIndex, AutoGen and
+        ElizaOS are in [`examples/`](../blob/main/examples/).
+
+        If your client accepts a base URL and it still does not work, that is a bug and
+        worth filing.
+
+  - type: input
+    id: stack
+    attributes:
+      label: Framework or runtime
+      placeholder: "Semantic Kernel, Vercel AI SDK, Haystack, a custom client"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What are you asking for?
+      options:
+        - "It does not work and I think it should"
+        - "It works and I want to contribute the example"
+        - "I want to know whether it is supported"
+    validations:
+      required: true
+
+  - type: textarea
+    id: detail
+    attributes:
+      label: Details
+      description: How the client is configured, what you tried, and what happened. If you have the drop-in line, paste it.
+    validations:
+      required: true
