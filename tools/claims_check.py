@@ -48,15 +48,31 @@ def load_rules() -> dict:
     return json.loads(RULES.read_text(encoding="utf-8"))
 
 
+def matches(rel: str, pat: str) -> bool:
+    """Glob match that understands a leading '**/'.
+
+    fnmatch has no notion of '**', so it translates '**/*.md' into a pattern that
+    requires a literal slash, and a root-level 'README.md' never matches it. That
+    silently excluded EVERY root-level file from this gate: README.md, SECURITY.md,
+    CONTRIBUTING.md and CODE_OF_CONDUCT.md. The gate reported "clean, 62 files" and
+    the repository's front page, the one file that actually published $0.1670, was
+    not among them. Found 2026-08-01, before the first push that would have relied
+    on it. `test_root_files_are_scanned` in the self-test is the regression guard.
+    """
+    if fnmatch(rel, pat):
+        return True
+    return pat.startswith("**/") and fnmatch(rel, pat[3:])
+
+
 def in_scope(rel: str, cfg: dict) -> bool:
     scope = cfg["scope"]
-    if any(fnmatch(rel, p) for p in scope["exclude_globs"]):
+    if any(matches(rel, p) for p in scope["exclude_globs"]):
         return False
-    return any(fnmatch(rel, p) for p in scope["include_globs"])
+    return any(matches(rel, p) for p in scope["include_globs"])
 
 
 def is_curated(rel: str, cfg: dict) -> bool:
-    return any(fnmatch(rel, p) for p in cfg["scope"]["curated_docs"])
+    return any(matches(rel, p) for p in cfg["scope"]["curated_docs"])
 
 
 def collect(cfg: dict) -> list[Path]:
@@ -77,15 +93,23 @@ def check_file(path: Path, text: str, cfg: dict) -> list[Finding]:
     found: list[Finding] = []
 
     def context(i: int) -> str:
-        """The line plus its neighbours, lowered.
+        """The line plus its neighbours, lowered, with markdown emphasis stripped.
 
         Negation escapes are checked against this rather than the single line,
         because prose wraps. "a measured property rather than a structural
         guarantee" splits across two lines at 96 columns, and a line-based
         check fails the very sentence the escape exists to permit.
+
+        Backticks and asterisks are stripped because escapes are prose patterns
+        and markdown is not prose. CONTRIBUTING.md line 82 reads "The flagship is
+        `$0.1669`, not `$0.1670`." and the escape "not $0.1670" missed it on a
+        code span. The self-test had asserted the same sentence WITHOUT the
+        backticks and passed, which is how the defect survived: a rule tested
+        against a tidied version of the text it is supposed to read.
         """
         lo, hi = max(0, i - 2), min(len(lower_lines), i + 1)
-        return " ".join(lower_lines[lo:hi])
+        joined = " ".join(lower_lines[lo:hi])
+        return joined.replace("`", "").replace("*", "").replace("_", "")
 
     def escaped(i: int, oks: list[str]) -> bool:
         return any(ok in context(i) for ok in oks)
@@ -96,7 +120,7 @@ def check_file(path: Path, text: str, cfg: dict) -> list[Finding]:
             continue
         why = spec if isinstance(spec, str) else spec["why"]
         only_in = None if isinstance(spec, str) else spec.get("only_in")
-        if only_in and not any(fnmatch(rel, p) for p in only_in):
+        if only_in and not any(matches(rel, p) for p in only_in):
             continue
         oks = [] if isinstance(spec, str) else [o.lower() for o in spec.get("negated_ok", [])]
         for i, ln in enumerate(lines, 1):
@@ -182,6 +206,14 @@ def self_test(cfg: dict) -> int:
         ("No customer reviews, testimonials or logos exist.", "social-proof", False),
         ("openai.api_base = 'http://x'", "banned-string", True),
         ("OpenAI(api_base='http://x')", "banned-string", False),
+        # CONTRIBUTING.md teaches the rule by naming the wrong value. Stating the
+        # correct figure and rejecting the wrong one is this gate's job, not a
+        # breach of it. Asserting the wrong value on its own still fails, above.
+        # Verbatim from CONTRIBUTING.md:82, backticks included. An earlier version
+        # of this case stripped them, passed, and left the real line failing.
+        ("- **Never round up.** The flagship is `$0.1669`, not `$0.1670`.",
+         "banned-string", False),
+        ("The flagship spend is $0.1670.", "banned-string", True),
         # Prose wraps. A negation escape that only looks at one line fails the
         # very sentence it exists to permit. These two cases are the regression
         # test for that, and both were live defects on 2026-08-01.
@@ -201,6 +233,22 @@ def self_test(cfg: dict) -> int:
         mark = f"{GRN}pass{OFF}" if good else f"{RED}FAIL{OFF}"
         want = "fires" if should_fire else "silent"
         print(f"  {mark}  [{rule:18}] {want:6}  {text[:52]}")
+
+    # Rules firing correctly on a string proves nothing if the file never reaches
+    # them. Every case above runs against a fake README.md path while collect()
+    # was returning zero root-level files. Assert discovery, not just matching.
+    print()
+    scanned = {p.relative_to(ROOT).as_posix() for p in collect(cfg)}
+    for must in ("README.md", "SECURITY.md", "CONTRIBUTING.md"):
+        present = must in scanned
+        ok &= present
+        mark = f"{GRN}pass{OFF}" if present else f"{RED}FAIL{OFF}"
+        print(f"  {mark}  [{'discovery':18}] scanned  {must}")
+    excluded = "CHANGELOG.md" not in scanned
+    ok &= excluded
+    print(f"  {f'{GRN}pass{OFF}' if excluded else f'{RED}FAIL{OFF}'}  "
+          f"[{'discovery':18}] skipped  CHANGELOG.md (it must be able to quote the defect)")
+
     print()
     if ok:
         print(f"{GRN}self-test passed. The gate fires on every defect it claims to catch.{OFF}")
