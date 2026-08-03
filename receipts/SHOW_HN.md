@@ -20,10 +20,13 @@ full-context call billed at input-token prices, and the agent does not get
 bored. The failure mode isn't hypothetical; it's a line item.
 
 Gubernaut is a local OpenAI-compatible proxy with a deterministic
-homeostatic controller inside. One config line to adopt:
+homeostatic controller inside. Start it, then one config line to adopt:
 
+```bash
+gcc-proxy --upstream https://api.openai.com     # binds 127.0.0.1:8000
+```
 ```python
-openai.base_url = "http://localhost:8000/v1"
+client = OpenAI(base_url="http://localhost:8000/v1")
 ```
 
 The controller's meta level is token-free by construction: it reads three

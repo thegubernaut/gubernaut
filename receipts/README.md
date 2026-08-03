@@ -12,8 +12,10 @@ copy. Every number here is a script output you can re-run from the source.*
 ## The one-line adoption
 
 ```python
-openai.base_url = "http://localhost:8000/v1"   # the Gubernaut local proxy
+client = OpenAI(base_url="http://localhost:8000/v1")   # the Gubernaut local proxy
 ```
+
+Start it first with `gcc-proxy --upstream https://api.openai.com`, which binds that port.
 
 A deterministic homeostatic controller reads three bounded numbers per turn, intensity,
 valence and repetition, and nothing else. No prompt can steer it, because no token sequence

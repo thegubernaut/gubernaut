@@ -3,14 +3,15 @@
 **A deterministic runtime governor for LLM agents**, packaged as an OpenAI-compatible local
 proxy. It hard-stops runaway agent loops before they reach your API bill.
 
-Adoption is one line:
-
-```python
-openai.base_url = "http://localhost:8000/v1"
-```
+Start the governor, then change one line in your code:
 
 ```bash
 pip install gubernaut-sdk
+gcc-proxy --upstream https://api.openai.com     # binds 127.0.0.1:8000
+```
+
+```python
+client = OpenAI(base_url="http://localhost:8000/v1")   # the one line of adoption
 ```
 
 Full project, receipts and documentation:
@@ -19,31 +20,41 @@ Full project, receipts and documentation:
 ## Quickstart
 
 ```python
-import openai
+from openai import OpenAI
 from gubernaut_sdk import launch_proxy
 
 proxy = launch_proxy(upstream="https://api.openai.com")
-openai.base_url = proxy.base_url        # every call is now governed
+client = OpenAI(base_url=proxy.base_url)   # every call is now governed
 
-resp = openai.chat.completions.create(
-    model="gpt-4o-mini",
+resp = client.chat.completions.with_raw_response.create(
+    model="gpt-5.6-sol",
     messages=[{"role": "user", "content": "hello"}],
 )
-print(resp.headers.get("x-gcc-posture"))   # DEFAULT | INHIBIT | REGROUND
+print(resp.http_response.headers.get("x-gcc-posture"))   # DEFAULT | INHIBIT | REGROUND
 
 proxy.stop()
 ```
 
-**Set `base_url`.** The pre-v1 `openai.api_base` attribute is ignored silently by current
-OpenAI SDKs, so a client configured that way goes straight upstream ungoverned and nothing
-errors to tell you.
+**Set `base_url` on the client.** Three things bite here, all of them silent:
+
+- The pre-v1 `openai.api_base` attribute is ignored by current OpenAI SDKs, so a client
+  configured that way goes straight upstream ungoverned and nothing errors to tell you.
+- The **module-level** `openai.base_url` attribute needs a **trailing slash**. Without one
+  the SDK builds `/v1chat/completions` and you get a 404. Setting `base_url` on the client
+  object, as above, works either way, which is why every example here uses that form.
+- `launch_proxy()` binds an **ephemeral** port unless you pass `port=`. Read
+  `proxy.base_url` rather than assuming 8000, or start it with
+  `launch_proxy(upstream=..., port=8000)`.
+
+Reading the posture needs `with_raw_response`: a plain `create()` returns a parsed
+`ChatCompletion`, which carries no headers.
 
 One distribution, two import packages: `gcc_proxy` is the proxy engine and CLI,
 `gubernaut_sdk` is the one-call facade with framework helpers.
 
 ```python
 from gubernaut_sdk import launch_proxy, langchain_kwargs
-llm = ChatOpenAI(**langchain_kwargs("gpt-4o-mini", base_url=proxy.base_url))
+llm = ChatOpenAI(**langchain_kwargs("gpt-5.6-sol", base_url=proxy.base_url))
 ```
 
 ## As a CLI

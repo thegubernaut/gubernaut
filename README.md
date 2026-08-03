@@ -4,10 +4,13 @@
 local, OpenAI-compatible proxy and hard-stops runaway agent loops before they reach your
 API bill.
 
-Adoption is one line:
+Start the governor, then change one line in your code:
 
+```bash
+gcc-proxy --upstream https://api.openai.com     # binds 127.0.0.1:8000
+```
 ```python
-openai.base_url = "http://localhost:8000/v1"
+client = OpenAI(base_url="http://localhost:8000/v1")   # the one line of adoption
 ```
 
 [![PyPI](https://img.shields.io/pypi/v/gubernaut-sdk?label=gubernaut-sdk&color=0072B2)](https://pypi.org/project/gubernaut-sdk/)
@@ -36,26 +39,36 @@ Everything is Apache-2.0 and free. There is no hosted tier, no key, and no accou
 ### Python, end to end
 
 ```python
-import openai
+from openai import OpenAI
 from gubernaut_sdk import launch_proxy
 
 # 1. start the governor in front of your upstream
-launch_proxy(upstream="https://api.openai.com")
+launch_proxy(upstream="https://api.openai.com", port=8000)
 
 # 2. one line of adoption
-openai.base_url = "http://localhost:8000/v1"
+client = OpenAI(base_url="http://localhost:8000/v1")
 
 # 3. nothing else changes. every turn now passes the controller.
-resp = openai.chat.completions.create(
-    model="gpt-4o-mini",
+resp = client.chat.completions.with_raw_response.create(
+    model="gpt-5.6-sol",
     messages=[{"role": "user", "content": "hello"}],
 )
-print(resp.headers.get("x-gcc-posture"))  # DEFAULT | INHIBIT | REGROUND
+print(resp.http_response.headers.get("x-gcc-posture"))  # DEFAULT | INHIBIT | REGROUND
 ```
 
-**Set `base_url`.** The pre-v1 `openai.api_base` attribute is ignored silently by current
-OpenAI SDKs, so a client configured that way goes straight to the upstream ungoverned and
-nothing errors to tell you.
+**Set `base_url` on the client.** Three things bite here, all of them silent:
+
+- The pre-v1 `openai.api_base` attribute is ignored by current OpenAI SDKs, so a client
+  configured that way goes straight to the upstream ungoverned and nothing errors to tell
+  you.
+- The **module-level** `openai.base_url` attribute needs a **trailing slash**. Without one
+  the SDK builds `/v1chat/completions` and returns 404. Setting `base_url` on the client
+  object works either way, which is why every example here uses that form.
+- `launch_proxy()` binds an **ephemeral** port unless you pass `port=`, so either pass it
+  as above or read `proxy.base_url` back.
+
+Reading the posture needs `with_raw_response`: a plain `create()` returns a parsed
+`ChatCompletion`, which carries no headers.
 
 Worked integrations for OpenAI SDK, LangChain, LlamaIndex, AutoGen and ElizaOS are in
 [`examples/`](examples/). All five adopt in one line, hard-stop a loop, and fail closed on

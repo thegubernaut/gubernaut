@@ -1,8 +1,12 @@
 """gcc_proxy — Gubernaut Cognitive Controller, drop-in local proxy (Python reference).
 
-Adoption is one line:
+Start the governor (`gcc-proxy --upstream https://api.openai.com`), then adopt
+it with one line:
 
-    openai.base_url = "http://localhost:8000/v1"
+    client = OpenAI(base_url="http://localhost:8000/v1")
+
+Set base_url on the CLIENT. The module-level ``openai.base_url`` attribute needs
+a trailing slash or the SDK builds ``/v1chat/completions`` and returns 404.
 
 Architecture (see 04_shared_docs/system_overview.md):
   telemetry.appraise()   IGL   text -> Telemetry {intensity, valence, repetition}
