@@ -6,6 +6,47 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 Published versions are immutable. A defect in a released version is corrected by shipping
 the next one, never by rewriting a published artifact.
 
+## [1.0.1] - 2026-08-03
+
+**Documentation only. No behaviour changed, and no controller constant moved.** The
+published quickstart did not run, in three separate ways, each of which fails silently or
+with an error that does not name its cause. All three were found by executing the snippet
+against the released 1.0.0 wheel in a clean virtual environment rather than by reading it.
+
+Every worked integration under `examples/` was already correct. Only the copy-paste path
+in the READMEs was broken, which is the path a new reader takes first.
+
+### Fixed
+
+- **`launch_proxy(upstream=...)` binds an ephemeral port.** `GccProxy.__init__` defaults
+  to `port=0`; the observed bind was 65252, while the following line in the quickstart told
+  the reader to point a client at `:8000`. The result is a connection refused on the most
+  copied string in the documentation. Pass `port=8000` explicitly, or read `proxy.base_url`
+  back. Both forms are now shown and the behaviour is stated rather than implied.
+- **The module-level `openai.base_url` attribute needs a trailing slash.** Without one,
+  openai 2.52.1 builds a request to `/v1chat/completions` and the proxy correctly returns
+  404. Setting `base_url` on the client object works with or without the slash, so that is
+  now the form every document shows.
+- **`resp.headers.get("x-gcc-posture")` raises `AttributeError`.** A plain `create()`
+  returns a parsed `ChatCompletion`, which carries no headers; reading the posture requires
+  `with_raw_response`. This was the "verify it works" line, so the one step whose entire
+  purpose is proving the governor sits in the request path was the step most certain to
+  crash.
+
+### Changed
+
+- Model identifiers in copied samples moved from `gpt-4o-mini` to a model from the measured
+  record. The `GCC_MODEL_*` runtime defaults in the node package are untouched, because
+  those are configuration rather than documentation.
+- `gcc_proxy`'s module docstring no longer presents a bare `openai.base_url` assignment as
+  the whole of adoption. A proxy has to be listening first, and the docstring now says so.
+
+### Note
+
+Version 1.0.0 remains on PyPI and is not withdrawn. Published versions are immutable, and
+the defects above are in its documentation rather than its behaviour: a reader who wires
+the proxy correctly gets the same governed request path from either release.
+
 ## [Unreleased]
 
 ### Changed

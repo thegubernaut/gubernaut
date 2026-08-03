@@ -23,7 +23,7 @@ from gcc_proxy.hrl import ControllerState, Decision, HomeostaticLoop, Posture, T
 from gcc_proxy.engine import GovernorEngine, EngineResult
 from gcc_proxy.config import GCCConfig
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 __all__ = [
     "ControllerState",

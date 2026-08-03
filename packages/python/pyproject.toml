@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "gubernaut-sdk"
-version = "1.0.0"
+version = "1.0.1"
 description = "Gubernaut SDK: a deterministic runtime governor for LLM agents. Drop-in local proxy (gcc_proxy) plus a one-call SDK facade (gubernaut_sdk) with framework config helpers."
 readme = "README.md"
 requires-python = ">=3.10"
