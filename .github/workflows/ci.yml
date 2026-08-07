@@ -76,6 +76,58 @@ jobs:
           fi
           echo "golden traces current"
 
+  core-js:
+    name: core-js node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    # Same split as the node job below: dist/ is the promise made to the engine
+    # floor, and the .ts test suite needs native type stripping (Node >= 22.6).
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ["20", "24"]
+    defaults:
+      run:
+        working-directory: packages/core-js
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+          cache-dependency-path: packages/core-js/package-lock.json
+      - run: npm ci
+      - run: npm run build
+      - name: the built artifact must govern, not merely load
+        # A load check would pass on a package whose wasm failed to
+        # instantiate, since the failure is inside an async call nobody made.
+        # Drive a saturating loop and require the escalation.
+        run: |
+          node -e "import('./dist/index.js').then(async m => {
+            const g = await m.Governor.create();
+            const seq = [[0.9,-0.9,0.9],[0.9,-0.9,0.95],[0.9,-0.9,0.98]];
+            const out = seq.map(([i,v,r]) => g.tick({intensity:i,valence:v,repetition:r}).posture);
+            if (out[out.length-1] !== 'REGROUND') { console.error('no REGROUND:', out); process.exit(1); }
+            if (m.wasmDigest !== '834015d73e6576d6c597b5a32a62c24ac56a50c7023261bf84b96beb01ded7d8') {
+              console.error('embedded controller is not the verified binary'); process.exit(1); }
+            console.log('dist/index.js governs on node ' + process.version + ': ' + out.join(' -> '));
+          }).catch(e => { console.error(e.message); process.exit(1); })"
+      - name: require() the CJS build too
+        run: node -e "const m=require('./dist/index.cjs'); m.Governor.create().then(g=>{const d=g.tick({intensity:0,valence:0,repetition:0}); if(d.posture!=='DEFAULT') process.exit(1); console.log('dist/index.cjs governs');}).catch(e=>{console.error(e.message);process.exit(1)})"
+      - name: the embedded wasm must still match the crate build
+        # The controller is embedded as base64. If someone regenerates it from a
+        # changed crate, the parity corpus and the soak stop describing what
+        # ships. Rebuild the crate and re-run the embed script: it exits
+        # non-zero on any digest change, and a clean tree proves no drift.
+        run: |
+          cd ../rust && cargo build --release --target wasm32-unknown-unknown
+          cd ../core-js && node tools/embed_wasm.mjs
+          cd .. && git diff --quiet -- core-js/src/wasm-bytes.ts || {
+            echo "::error::The embedded wasm differs from a fresh crate build."; exit 1; }
+      - name: parity and soak (needs native type stripping, Node >= 22.6)
+        if: matrix.node != '20'
+        run: npm test
+      - run: npm run typecheck
+
   node:
     name: node ${{ matrix.node }}
     runs-on: ubuntu-latest

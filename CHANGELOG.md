@@ -6,6 +6,111 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 Published versions are immutable. A defect in a released version is corrected by shipping
 the next one, never by rewriting a published artifact.
 
+## [1.0.1-sync] - 2026-08-07
+
+The three registries had drifted apart. PyPI was at 1.0.1; crates.io and npm were still at
+1.0.0, because 1.0.1 was a Python-only documentation fix and the other two are versioned
+independently. This release brings every registry to 1.0.1, renames the Rust crate to
+something a person can find, and adds a fourth package.
+
+**The controller did not change.** The compiled wasm is byte-identical, SHA-256
+`834015d7…`, unchanged since 0.1.1 and unchanged across the rename. Every published figure
+still describes the binary that ships.
+
+`gubernaut-sdk` stays at **1.0.1** and was not republished. It was already correct, and
+PyPI versions are immutable, so touching it would have meant 1.0.2 and an immediate
+re-desync of the versions this release exists to align.
+
+### Changed
+
+- **The Rust crate is now `gubernaut-core`.** `gcc-core` was a discoverability dead end
+  from the day it was published: type "gcc" into any developer search and you get the GNU
+  Compiler Collection, forever. Nobody who did not already know the crate existed could
+  find it.
+
+  crates.io has no rename, so this is a new crate and the old name is handled deliberately
+  rather than abandoned. See *Deprecated* below.
+
+  The `#[no_mangle]` ABI symbols are **not** renamed. They are still `gcc_tick` and
+  `gcc_last_*`, because renaming them would change the compiled bytes and break every
+  existing wasm embedder to fix a string nobody types.
+
+  Method note, since "byte-identical" is easy to assert and easy to get wrong: the wasm was
+  built **before** the rename first, to establish that this toolchain reproduces the shipped
+  1.0.0 artifact at all. It does, exactly. Only then was the crate renamed and rebuilt, and
+  the digest compared against that control rather than against a claim. Without the control
+  build, a match would not have distinguished "the rename is neutral" from "the toolchain
+  happens to produce this".
+
+- **`@gubernaut/plugin-gcc` is 1.0.1**, with `gubernautPlugin` and `callGubernaut` exported
+  alongside the existing `gccPlugin` and `callGcc`. Aliases, not replacements: the 1.0.0
+  names keep working indefinitely. The tests assert *identity* rather than equivalence, so
+  the aliases cannot quietly become a second implementation that drifts, and CI now checks
+  both name sets against the built `dist/` for ESM and CJS, because an alias that exists in
+  source and not in the build passes every test and still ships broken.
+
+- The documented CLI is now `gubernaut-proxy`. This is not new: `pyproject.toml` has
+  installed both `gubernaut-proxy` and `gcc-proxy` entry points since 1.0.0, so this is a
+  documentation change with no packaging change behind it. `gcc-proxy` still works.
+
+### Added
+
+- **`@gubernaut/core`**, the controller in-process for JavaScript. The same wasm the
+  `gubernaut-core` crate produces, base64 inlined, with a typed API over the scalar ABI.
+  No dependencies, no network, no filesystem, no bundler plugin and no loader config, so it
+  runs unchanged in Node, Deno, Bun, Cloudflare workerd and the browser.
+
+  It reuses the **existing** golden corpus rather than shipping its own:
+  `packages/rust/tests/golden/traces.jsonl`, generated from the live Python controller, now
+  gates three languages. **73 value-exact steps across 8 scenarios and 8 boundary
+  rejections**, compared with `assert.equal` on doubles rather than a tolerance, because
+  bit-exactness is the claim and a tolerance would dissolve it. Copying the corpus into the
+  package would have let the copies drift, and a drifted parity fixture is worse than none:
+  it passes while the thing it pins has moved.
+
+  The 10,000-tick soak is a test in the package too, and `tools/embed_wasm.mjs` refuses to
+  inline any wasm whose digest is not the verified one, so a changed controller cannot
+  arrive silently through the embed step.
+
+  Scope worth stating plainly: **this package decides, it does not intercept.** Acting on
+  `REGROUND` is the caller's job. Hard-stopping the upstream call before the tokens are
+  spent is what the proxy in `gubernaut-sdk` does.
+
+### Deprecated
+
+- **`gcc-core`.** Version 1.0.0 stays published and is **not yanked**, so anything already
+  depending on it keeps building. Version 1.0.1 is a re-export shim
+  (`packages/rust-shim/`) that forwards to `gubernaut-core`, so an existing dependency can
+  be bumped without a code change.
+
+  The shim is `lib`-only, and this is a real limitation rather than an oversight: the wasm
+  exports are `#[no_mangle]` linker symbols compiled into the defining crate's own binary,
+  and `pub use` forwards Rust paths, not symbols. A `cdylib` in the shim would build an
+  empty wasm module carrying none of `gcc_tick` or the getters, which is worse than
+  offering nothing. **wasm consumers must depend on `gubernaut-core` directly.**
+
+  Its test imports through the *old* path and asserts an actual decision plus the numeric
+  boundary, rather than asserting that the crate compiles. A shim that builds but re-exports
+  nothing useful looks green in CI and breaks on the first real dependent.
+
+### Fixed
+
+- **The front page advertised a version we no longer shipped.** `README.md` told every
+  reader `pip install gubernaut-sdk==1.0.0` while PyPI, gubernaut.com and this file all read
+  1.0.1. It had been wrong since the 1.0.1 release four days earlier. Every gate was green,
+  CI was green, and the claims gate scanned the file and found nothing, because it had no
+  concept of a version.
+
+  A pinned install command is a promise a reader executes verbatim, which makes it a claim
+  like any number in this repository. `claims_check.py` now reads each package's own
+  manifest and fails any install form that disagrees with it. It matches install **forms**
+  only, never bare mentions, so "gcc-core 1.0.0 stays published and is not yanked" remains
+  sayable while `cargo add gcc-core@1.0.0` does not. The self-test cases read the live
+  manifests, so they will not need editing on the next bump, and they cover both the
+  must-fire and the must-stay-silent direction.
+
+  The same defect existed in the Rust and Node install rows and in the issue template.
+
 ## [1.0.1] - 2026-08-03
 
 **Documentation only. No behaviour changed, and no controller constant moved.** The

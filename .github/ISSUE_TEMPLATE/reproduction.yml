@@ -53,7 +53,7 @@ body:
     id: version
     attributes:
       label: Package version
-      placeholder: "gubernaut-sdk 1.0.0 / gcc-core 1.0.0 / @gubernaut/plugin-gcc 1.0.0"
+      placeholder: "gubernaut-sdk 1.0.1 / gubernaut-core 1.0.1 / @gubernaut/core 1.0.1"
     validations:
       required: true
 

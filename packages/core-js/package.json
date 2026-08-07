@@ -1,0 +1,64 @@
+{
+  "name": "@gubernaut/core",
+  "version": "1.0.1",
+  "description": "The Gubernaut controller, in-process, for JavaScript. A deterministic runtime governor for LLM agents that reads three bounded numbers and no tokens, and hard-stops runaway loops. Embedded wasm, no dependencies, runs in Node, Deno, Bun, workerd and the browser.",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "node --test test/parity.test.ts test/soak.test.ts",
+    "embed": "node tools/embed_wasm.mjs",
+    "build": "tsup",
+    "prepack": "npm run build"
+  },
+  "keywords": [
+    "llm",
+    "agents",
+    "governance",
+    "guardrails",
+    "agent-loop",
+    "cost-control",
+    "deterministic",
+    "wasm",
+    "edge",
+    "gubernaut"
+  ],
+  "author": "Gubernaut Research",
+  "license": "Apache-2.0",
+  "homepage": "https://gubernaut.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thegubernaut/gubernaut.git",
+    "directory": "packages/core-js"
+  },
+  "bugs": {
+    "url": "https://github.com/thegubernaut/gubernaut/issues"
+  },
+  "devDependencies": {
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
