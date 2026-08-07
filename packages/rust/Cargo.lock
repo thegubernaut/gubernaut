@@ -3,8 +3,8 @@
 version = 4
 
 [[package]]
-name = "gcc-core"
-version = "1.0.0"
+name = "gubernaut-core"
+version = "1.0.1"
 dependencies = [
  "serde_json",
 ]

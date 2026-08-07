@@ -1,7 +1,7 @@
 {
-  "name": "@gubernaut/plugin-gcc",
+  "name": "@gubernaut/core",
   "version": "1.0.1",
-  "description": "ElizaOS plugin: route agent LLM calls through the Gubernaut local proxy — a deterministic runtime governor with runaway-loop hard-stop and cost containment.",
+  "description": "The Gubernaut controller, in-process, for JavaScript. A deterministic runtime governor for LLM agents that reads three bounded numbers and no tokens, and hard-stops runaway loops. Embedded wasm, no dependencies, runs in Node, Deno, Bun, workerd and the browser.",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -23,20 +23,25 @@
     "dist",
     "LICENSE"
   ],
+  "sideEffects": false,
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "node --test test/gcc-provider.test.ts test/plugin-keys.test.ts",
+    "test": "node --test test/parity.test.ts test/soak.test.ts",
+    "embed": "node tools/embed_wasm.mjs",
     "build": "tsup",
     "prepack": "npm run build"
   },
   "keywords": [
-    "elizaos",
-    "plugin",
-    "gubernaut",
-    "gcc",
+    "llm",
+    "agents",
     "governance",
-    "ai-agents",
-    "web3"
+    "guardrails",
+    "agent-loop",
+    "cost-control",
+    "deterministic",
+    "wasm",
+    "edge",
+    "gubernaut"
   ],
   "author": "Gubernaut Research",
   "license": "Apache-2.0",
@@ -44,18 +49,10 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thegubernaut/gubernaut.git",
-    "directory": "packages/node"
+    "directory": "packages/core-js"
   },
   "bugs": {
     "url": "https://github.com/thegubernaut/gubernaut/issues"
-  },
-  "peerDependencies": {
-    "@elizaos/core": ">=1.0.0"
-  },
-  "peerDependenciesMeta": {
-    "@elizaos/core": {
-      "optional": true
-    }
   },
   "devDependencies": {
     "tsup": "^8.5.1",

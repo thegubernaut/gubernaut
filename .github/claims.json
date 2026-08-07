@@ -205,5 +205,37 @@
       "receipts/README.md",
       "packages/*/README.md"
     ]
+  },
+  "version_pins": {
+    "$comment": "An install command that names a version is a promise a reader runs verbatim. On 2026-08-07 the README front page still said `pip install gubernaut-sdk==1.0.0` while PyPI, the site and CHANGELOG.md all read 1.0.1, and every other rule in this file was green. The manifest is the authority; prose that disagrees with it is the defect. Only install FORMS are matched, never bare mentions, so true sentences about superseded versions ('gcc-core 1.0.0 stays published and is not yanked') stay legal.",
+    "packages": {
+      "gubernaut-sdk": {
+        "manifest": "packages/python/pyproject.toml",
+        "version_re": "^version\\s*=\\s*\"([^\"]+)\""
+      },
+      "gubernaut-core": {
+        "manifest": "packages/rust/Cargo.toml",
+        "version_re": "^version\\s*=\\s*\"([^\"]+)\""
+      },
+      "gcc-core": {
+        "manifest": "packages/rust-shim/Cargo.toml",
+        "version_re": "^version\\s*=\\s*\"([^\"]+)\""
+      },
+      "@gubernaut/plugin-gcc": {
+        "manifest": "packages/node/package.json",
+        "version_re": "^\\s*\"version\":\\s*\"([^\"]+)\""
+      },
+      "@gubernaut/core": {
+        "manifest": "packages/core-js/package.json",
+        "version_re": "^\\s*\"version\":\\s*\"([^\"]+)\""
+      }
+    },
+    "$comment_forms": "{name} is substituted with the escaped package name. Each pattern must expose a named group 'ver'. These are the copy-paste shapes a reader actually executes.",
+    "install_forms": [
+      "pip install\\s+{name}==(?P<ver>\\d+\\.\\d+\\.\\d+)",
+      "cargo add\\s+{name}@(?P<ver>\\d+\\.\\d+\\.\\d+)",
+      "npm (?:install|i|add)\\s+{name}@(?P<ver>\\d+\\.\\d+\\.\\d+)",
+      "^\\s*{name}\\s*=\\s*\\\"(?P<ver>\\d+\\.\\d+\\.\\d+)\\\"\\s*$"
+    ]
   }
 }

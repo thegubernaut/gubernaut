@@ -7,14 +7,15 @@ API bill.
 Start the governor, then change one line in your code:
 
 ```bash
-gcc-proxy --upstream https://api.openai.com     # binds 127.0.0.1:8000
+gubernaut-proxy --upstream https://api.openai.com     # binds 127.0.0.1:8000
 ```
 ```python
 client = OpenAI(base_url="http://localhost:8000/v1")   # the one line of adoption
 ```
 
 [![PyPI](https://img.shields.io/pypi/v/gubernaut-sdk?label=gubernaut-sdk&color=0072B2)](https://pypi.org/project/gubernaut-sdk/)
-[![crates.io](https://img.shields.io/crates/v/gcc-core?label=gcc-core&color=0072B2)](https://crates.io/crates/gcc-core)
+[![crates.io](https://img.shields.io/crates/v/gubernaut-core?label=gubernaut-core&color=0072B2)](https://crates.io/crates/gubernaut-core)
+[![npm](https://img.shields.io/npm/v/%40gubernaut%2Fcore?label=%40gubernaut%2Fcore&color=0072B2)](https://www.npmjs.com/package/@gubernaut/core)
 [![npm](https://img.shields.io/npm/v/%40gubernaut%2Fplugin-gcc?label=%40gubernaut%2Fplugin-gcc&color=0072B2)](https://www.npmjs.com/package/@gubernaut/plugin-gcc)
 [![License](https://img.shields.io/badge/license-Apache--2.0-555555)](LICENSE)
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.21303518-0072B2)](https://doi.org/10.5281/zenodo.21303518)
@@ -26,13 +27,19 @@ client = OpenAI(base_url="http://localhost:8000/v1")   # the one line of adoptio
 
 ## Start here
 
-One product, three ways in. Pick the row that matches your stack.
+One product, four ways in. Pick the row that matches your stack.
 
 | | Install | Use it for |
 | --- | --- | --- |
-| **Python** · start here | `pip install gubernaut-sdk==1.0.0` | The reference implementation. The proxy, the controller, the CLI. Any OpenAI-compatible client. |
-| **Rust** · for performance | `cargo add gcc-core@1.0.0` | The controller on its own, no network. Compiles to wasm and runs on the edge. |
-| **Node** · for framework hooks | `npm install @gubernaut/plugin-gcc@1.0.0` | ElizaOS agents and on-chain runtimes. |
+| **Python** · start here | `pip install gubernaut-sdk==1.0.1` | The reference implementation. The proxy, the controller, the CLI. Any OpenAI-compatible client. |
+| **Rust** · for performance | `cargo add gubernaut-core@1.0.1` | The controller on its own, no network. Compiles to wasm and runs on the edge. |
+| **JS/TS** · no proxy needed | `npm install @gubernaut/core@1.0.1` | The same wasm controller, in-process. Node, Deno, Bun, workerd, the browser. |
+| **Node** · ElizaOS | `npm install @gubernaut/plugin-gcc@1.0.1` | ElizaOS agents and on-chain runtimes. |
+
+> **Renamed at 1.0.1:** the Rust crate was `gcc-core`. "gcc" is unsearchable next to the GNU
+> Compiler Collection. `gcc-core` 1.0.0 is **not yanked**, and `gcc-core` 1.0.1 is a shim
+> that re-exports `gubernaut-core`, so nothing existing breaks. The controller is unchanged:
+> the compiled wasm is byte-identical across the rename.
 
 Everything is Apache-2.0 and free. There is no hosted tier, no key, and no account.
 
@@ -210,7 +217,9 @@ A result that disagrees with ours is more useful to us than one that agrees.
 | Path | Contents |
 | --- | --- |
 | [`packages/python/`](packages/python/) | `gubernaut-sdk`. Proxy engine, controller, CLI, one-call facade |
-| [`packages/rust/`](packages/rust/) | `gcc-core`. The Rust controller, also compiles to wasm |
+| [`packages/rust/`](packages/rust/) | `gubernaut-core`. The Rust controller, also compiles to wasm |
+| [`packages/rust-shim/`](packages/rust-shim/) | `gcc-core` 1.0.1. Deprecation shim re-exporting `gubernaut-core` |
+| [`packages/core-js/`](packages/core-js/) | `@gubernaut/core`. The same wasm controller for JS/TS |
 | [`packages/node/`](packages/node/) | `@gubernaut/plugin-gcc`. The ElizaOS plugin |
 | [`examples/`](examples/) | Per-framework demos: OpenAI SDK, LangChain, LlamaIndex, AutoGen, ElizaOS |
 | [`bench/`](bench/) | Latency harness and the real-upstream soak |

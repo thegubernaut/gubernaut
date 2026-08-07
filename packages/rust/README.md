@@ -1,11 +1,11 @@
-# gcc-core
+# gubernaut-core
 
 **The Gubernaut controller, compiled.** A bit-exact Rust port of the Python reference
 controller: the same IEEE-754 f64 operations in the same order, verified by a golden-trace
 parity test. No runtime dependencies, `#![deny(unsafe_code)]`, and it compiles to wasm.
 
 ```bash
-cargo add gcc-core
+cargo add gubernaut-core
 ```
 
 Use this when you want the **decision without the proxy**: no network, no HTTP hop, no
@@ -13,7 +13,29 @@ Python. Embedding in an edge worker, a gateway, or an agent runtime that already
 own transport.
 
 The full product, including the OpenAI-compatible proxy, is
-[gubernaut](https://github.com/thegubernaut/gubernaut).
+[gubernaut](https://github.com/thegubernaut/gubernaut). For JavaScript and TypeScript,
+this same wasm is packaged as [`@gubernaut/core`](https://www.npmjs.com/package/@gubernaut/core).
+
+## Renamed from `gcc-core` at 1.0.1
+
+`gcc-core` was unsearchable. Type "gcc" into any developer search and you get the GNU
+Compiler Collection, forever; nobody who did not already know this crate existed could find
+it. It is now `gubernaut-core`.
+
+crates.io cannot rename a crate, so:
+
+- **`gcc-core` 1.0.0** stays published and is **not yanked**. Anything already depending on
+  it keeps building.
+- **`gcc-core` 1.0.1** is a deprecation shim that re-exports this crate, so an existing
+  dependency can be bumped without a code change.
+- The shim is `lib`-only and **cannot forward the `cdylib`/wasm target**: `#[no_mangle]`
+  symbols do not re-export. If you consume the wasm, depend on `gubernaut-core` directly.
+
+**The controller did not change.** The compiled wasm is byte-identical across the rename,
+SHA256 `834015d7…`, the same binary that passed the 10,000-tick edge soak. The rename moved
+one string in `Cargo.toml`; the `#[no_mangle]` ABI symbols are still `gcc_tick` and
+`gcc_last_*`, because renaming those would change the binary and break every existing
+embedder.
 
 ## What it is
 
