@@ -49,6 +49,33 @@ jobs:
         run: cargo test
       - name: build wasm32
         run: cargo build --release --target wasm32-unknown-unknown
+      - name: the gcc-core deprecation shim still forwards
+        # A shim that compiles but re-exports nothing useful looks green and
+        # breaks on the first real dependent, so its test imports through the
+        # OLD path and asserts a decision plus the numeric boundary.
+        working-directory: packages/rust-shim
+        run: cargo test
+      - name: the wasm @gubernaut/core embeds must match a fresh crate build
+        # This lives in the RUST job, not the core-js one, because it needs the
+        # wasm32 target. The first version of it sat in core-js, which installs
+        # Node and no Rust, and failed with "can't find crate for std" on both
+        # Node versions. It passed locally, where the target happens to be
+        # installed. CI earning its keep.
+        #
+        # What it protects: the controller is base64 inlined into core-js. If
+        # someone regenerates it from a changed crate, the parity corpus, the
+        # 10,000-tick soak and every published latency figure stop describing
+        # what ships. embed_wasm.mjs already refuses a digest change; this
+        # catches the other direction, a committed blob that no longer matches
+        # its source.
+        working-directory: packages/core-js
+        run: |
+          node tools/embed_wasm.mjs
+          git diff --quiet -- src/wasm-bytes.ts || {
+            echo "::error::The embedded wasm differs from a fresh crate build."
+            git diff --stat -- src/wasm-bytes.ts
+            exit 1; }
+          echo "embedded wasm matches the crate build"
 
   parity:
     name: golden traces are current
@@ -113,16 +140,8 @@ jobs:
           }).catch(e => { console.error(e.message); process.exit(1); })"
       - name: require() the CJS build too
         run: node -e "const m=require('./dist/index.cjs'); m.Governor.create().then(g=>{const d=g.tick({intensity:0,valence:0,repetition:0}); if(d.posture!=='DEFAULT') process.exit(1); console.log('dist/index.cjs governs');}).catch(e=>{console.error(e.message);process.exit(1)})"
-      - name: the embedded wasm must still match the crate build
-        # The controller is embedded as base64. If someone regenerates it from a
-        # changed crate, the parity corpus and the soak stop describing what
-        # ships. Rebuild the crate and re-run the embed script: it exits
-        # non-zero on any digest change, and a clean tree proves no drift.
-        run: |
-          cd ../rust && cargo build --release --target wasm32-unknown-unknown
-          cd ../core-js && node tools/embed_wasm.mjs
-          cd .. && git diff --quiet -- core-js/src/wasm-bytes.ts || {
-            echo "::error::The embedded wasm differs from a fresh crate build."; exit 1; }
+      # The "embedded wasm matches a fresh crate build" check needs the wasm32
+      # target and therefore lives in the `rust` job, which already has it.
       - name: parity and soak (needs native type stripping, Node >= 22.6)
         if: matrix.node != '20'
         run: npm test
