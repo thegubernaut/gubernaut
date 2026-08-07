@@ -1,0 +1,40 @@
+[package]
+# Deprecation shim. The crate formerly published here is now `gubernaut-core`.
+#
+# crates.io has no rename. `gcc-core` 1.0.0 is published and immutable, and
+# yanking it would break anyone already depending on it for no gain. So this
+# 1.0.1 exists to give that name a forwarding address: it re-exports
+# `gubernaut-core` and its README says where to go.
+#
+# This is deliberately NOT a member of any workspace and is published by hand,
+# after `gubernaut-core` 1.0.1 is on the index. See PUBLISH_1.0.1_SYNC.md.
+name = "gcc-core"
+version = "1.0.1"
+edition = "2021"
+description = "DEPRECATED — renamed to `gubernaut-core`. This is a re-export shim; use gubernaut-core instead."
+license = "Apache-2.0"
+readme = "README.md"
+keywords = ["llm", "agents", "governance", "deprecated", "deterministic"]
+categories = ["algorithms", "science"]
+repository = "https://github.com/thegubernaut/gubernaut"
+homepage = "https://gubernaut.com"
+
+[package.metadata.gubernaut]
+doi = "10.5281/zenodo.21303518"
+
+[lib]
+name = "gcc_core"
+# `lib` only, deliberately. The real crate is ["lib", "cdylib"], but a cdylib
+# cannot be forwarded: its wasm exports are `#[no_mangle]` symbols compiled
+# into that crate's own binary, and `pub use` re-exports Rust paths, not
+# linker symbols. A cdylib here would build an EMPTY wasm module with none of
+# the `gcc_tick` exports, which is worse than not offering one. wasm consumers
+# depend on `gubernaut-core` directly.
+crate-type = ["lib"]
+
+[dependencies]
+# `version` + `path`: the path lets this build and verify locally before
+# `gubernaut-core` 1.0.1 is on the index; `cargo publish` strips the path and
+# ships the version requirement. Publishing this shim still REQUIRES
+# gubernaut-core 1.0.1 to be live first, or the upload is rejected.
+gubernaut-core = { version = "1.0.1", path = "../rust" }

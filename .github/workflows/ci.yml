@@ -108,15 +108,22 @@ jobs:
       - run: npm ci
       - run: npm run build
       - name: the published artifact must load on the declared engine floor
+        # Both name sets are checked. The gcc* names are the published 1.0.0
+        # surface and dropping one would break every existing dependent; the
+        # gubernaut* names are the 1.0.1 aliases the docs now lead with, and an
+        # alias missing from the BUILD would pass the source tests and still
+        # ship broken.
         run: |
           node -e "import('./dist/index.js').then(m => {
-            const need = ['gccPlugin', 'callGcc', 'loadConfig'];
+            const need = ['gccPlugin', 'callGcc', 'loadConfig', 'gubernautPlugin', 'callGubernaut'];
             const missing = need.filter(k => !(k in m));
             if (missing.length) { console.error('missing exports:', missing); process.exit(1); }
+            if (m.gubernautPlugin !== m.gccPlugin) { console.error('gubernautPlugin is not gccPlugin'); process.exit(1); }
+            if (m.callGubernaut !== m.callGcc) { console.error('callGubernaut is not callGcc'); process.exit(1); }
             console.log('dist/index.js loads on node ' + process.version);
           }).catch(e => { console.error(e.message); process.exit(1); })"
       - name: require() the CJS build too
-        run: node -e "const m=require('./dist/index.cjs'); if(!m.gccPlugin) process.exit(1); console.log('dist/index.cjs loads')"
+        run: node -e "const m=require('./dist/index.cjs'); if(!m.gccPlugin||!m.gubernautPlugin) process.exit(1); if(m.gubernautPlugin!==m.gccPlugin) process.exit(1); console.log('dist/index.cjs loads')"
       - name: test suite (needs native type stripping, Node >= 22.6)
         if: matrix.node != '20'
         run: npm test

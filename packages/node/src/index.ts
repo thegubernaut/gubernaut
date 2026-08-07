@@ -92,6 +92,16 @@ export const gccPlugin: Plugin = {
 
 export default gccPlugin;
 export { callGcc, loadConfig };
+
+// Preferred names as of 1.0.1. "gcc" reads as the GNU Compiler Collection to
+// anyone who has not read the paper, so the Gubernaut-spelled names lead in the
+// docs. These are ALIASES, not replacements: `gccPlugin` and `callGcc` are the
+// published 1.0.0 surface and keep working indefinitely. Same object, same
+// function — asserted in test/plugin-keys.test.ts, because an alias that
+// drifted from its original would be worse than no alias at all.
+export const gubernautPlugin = gccPlugin;
+export { callGcc as callGubernaut };
+
 export {
   GubernautError,
   GubernautConnectionError,
@@ -99,3 +109,5 @@ export {
   GubernautConfigError,
 } from "./errors.ts";
 export type { GccConfig, TextParams, GccCallResult } from "./gcc-provider.ts";
+// Gubernaut-spelled type alias for GccConfig; the original name is unchanged.
+export type { GccConfig as GubernautConfig } from "./gcc-provider.ts";

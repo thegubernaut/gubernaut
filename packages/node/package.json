@@ -1,7 +1,7 @@
 {
   "name": "@gubernaut/plugin-gcc",
-  "version": "1.0.0",
-  "description": "ElizaOS plugin: route agent LLM calls through the Gubernaut Cognitive Controller (GCC) local proxy — deterministic homeostatic governance, runaway-loop hard-stop, and cost containment.",
+  "version": "1.0.1",
+  "description": "ElizaOS plugin: route agent LLM calls through the Gubernaut local proxy — a deterministic runtime governor with runaway-loop hard-stop and cost containment.",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

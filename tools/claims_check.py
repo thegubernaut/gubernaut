@@ -86,6 +86,45 @@ def collect(cfg: dict) -> list[Path]:
     return sorted(files)
 
 
+_MANIFEST_CACHE: dict[int, dict[str, str]] = {}
+
+
+def manifest_versions(cfg: dict) -> dict[str, str]:
+    """Read each package's version from its own manifest. Cached per config.
+
+    The manifest is the only authority. Prose that disagrees with it is the
+    defect, never the other way round.
+    """
+    key = id(cfg)
+    if key in _MANIFEST_CACHE:
+        return _MANIFEST_CACHE[key]
+    out: dict[str, str] = {}
+    for pkg, spec in cfg["version_pins"]["packages"].items():
+        path = ROOT / spec["manifest"]
+        if not path.exists():
+            continue  # a package not yet created is not a violation
+        m = re.search(spec["version_re"], path.read_text(encoding="utf-8"), re.M)
+        if m:
+            out[pkg] = m.group(1)
+    _MANIFEST_CACHE[key] = out
+    return out
+
+
+def install_pins_in(line: str, pkg: str, pins: dict) -> list[tuple[str, str]]:
+    """Version pins for `pkg` that appear in an INSTALL form on this line.
+
+    Returns (version, matched_text) pairs. A bare mention of a version is not an
+    install form and is deliberately not matched, so a changelog sentence or a
+    "not yanked" note about an older release stays legal.
+    """
+    hits = []
+    for tmpl in pins["install_forms"]:
+        pat = tmpl.replace("{name}", re.escape(pkg))
+        for m in re.finditer(pat, line):
+            hits.append((m.group("ver"), m.group(0)))
+    return hits
+
+
 def check_file(path: Path, text: str, cfg: dict) -> list[Finding]:
     rel = path.relative_to(ROOT).as_posix()
     lines = text.splitlines()
@@ -169,7 +208,30 @@ def check_file(path: Path, text: str, cfg: dict) -> list[Finding]:
                                  f"{triggers[0]} without {', '.join(missing)}",
                                  rule["why"]))
 
-    # 5. dash ban, curated documentation surface only
+    # 5. version pins. An install command that names a version is a promise a
+    #    reader executes verbatim, so it is a claim like any other, and it went
+    #    stale the moment 1.0.1 shipped: the README front page still said
+    #    `pip install gubernaut-sdk==1.0.0` while PyPI, the site and the
+    #    changelog all read 1.0.1. Every other gate was green. Found 2026-08-07.
+    #
+    #    Only INSTALL forms are checked, never bare mentions. "gcc-core 1.0.0
+    #    stays published and is not yanked" is a true sentence about an old
+    #    version and must stay sayable; `cargo add gcc-core@1.0.0` is a stale
+    #    instruction and must not.
+    pins = cfg.get("version_pins")
+    if pins:
+        declared = manifest_versions(cfg)
+        for i, ln in enumerate(lines, 1):
+            for pkg, want in declared.items():
+                for got, form in install_pins_in(ln, pkg, pins):
+                    if got != want:
+                        found.append(Finding(
+                            path, i, "version-pin", f"{form} (manifest says {want})",
+                            f"{pkg} is at {want}. An install command pinning {got} tells a "
+                            f"reader to install a version we no longer ship. Bump it here, "
+                            f"or bump the manifest, but never leave them disagreeing."))
+
+    # 6. dash ban, curated documentation surface only
     if is_curated(rel, cfg):
         for ch in cfg["dash_ban"]["chars"]:
             for i, ln in enumerate(lines, 1):
@@ -193,6 +255,21 @@ def run(cfg: dict) -> list[Finding]:
 
 def self_test(cfg: dict) -> int:
     """Prove the gate fires. A green gate that cannot fail is not a gate."""
+
+    def _v(pkg: str) -> str:
+        """The live manifest version, so these cases never need editing on a bump."""
+        got = manifest_versions(cfg).get(pkg)
+        if got is None:
+            raise SystemExit(
+                f"self-test cannot run: no manifest version for {pkg}. "
+                "Check version_pins.packages in .github/claims.json.")
+        return got
+
+    def _bump(ver: str) -> str:
+        """A version this package definitely is not, for the must-fire cases."""
+        parts = ver.split(".")
+        return ".".join(parts[:-1] + [str(int(parts[-1]) + 1)])
+
     cases = [
         ("$0.1670 is the flagship spend.", "banned-string", True),
         ("$0.1669 is the flagship spend.", "banned-string", False),
@@ -221,6 +298,20 @@ def self_test(cfg: dict) -> int:
          "banned-word", False),
         ("The deciding meta level accepts floats only.\nNo consciousness, sentience, or "
          "experience is claimed\nor implied.", "banned-word", False),
+        # version-pin, added 2026-08-07 after the front page shipped a stale
+        # install command through a fully green gate. These cases are written
+        # against the LIVE manifests, so they keep working as versions move.
+        (f"pip install gubernaut-sdk=={_bump(_v('gubernaut-sdk'))}", "version-pin", True),
+        (f"pip install gubernaut-sdk=={_v('gubernaut-sdk')}", "version-pin", False),
+        (f"cargo add gubernaut-core@{_bump(_v('gubernaut-core'))}", "version-pin", True),
+        (f"cargo add gubernaut-core@{_v('gubernaut-core')}", "version-pin", False),
+        (f"npm install @gubernaut/plugin-gcc@{_bump(_v('@gubernaut/plugin-gcc'))}",
+         "version-pin", True),
+        # The whole point of matching install FORMS and not bare mentions: this
+        # sentence is true, is load-bearing, and must never be gated away.
+        ("`gcc-core` 1.0.0 stays published and is not yanked.", "version-pin", False),
+        ("Renamed from gcc-core at 1.0.1. gcc-core 1.0.0 is the last real release "
+         "under that name.", "version-pin", False),
     ]
     fake = ROOT / "README.md"
     ok = True

@@ -1,16 +1,22 @@
 [package]
-name = "gcc-core"
-version = "1.0.0"
+# Renamed from `gcc-core` at 1.0.1. "gcc" is unsearchable next to the GNU
+# Compiler Collection, so the crate could never be found by anyone who did not
+# already know it existed. crates.io cannot rename a crate: `gcc-core` 1.0.0
+# stays published forever, and `gcc-core` 1.0.1 is a deprecation shim
+# (packages/rust-shim/) that re-exports this crate. Neither is yanked.
+#
+# The controller itself did not change. The compiled wasm is byte-identical
+# across the rename — see CHANGELOG 1.0.1-sync.
+name = "gubernaut-core"
+version = "1.0.1"
 edition = "2021"
-description = "GCC deterministic meta-level controller (HRL) — compiled core with golden-trace parity to the Python reference"
+description = "Deterministic runtime governor for LLM agents: the meta-level controller (HRL), with golden-trace parity to the Python reference. Compiles to wasm."
 license = "Apache-2.0"
 readme = "README.md"
 keywords = ["llm", "agents", "governance", "wasm", "deterministic"]
 categories = ["wasm", "algorithms", "science"]
 repository = "https://github.com/thegubernaut/gubernaut"
 homepage = "https://gubernaut.com"
-# Publish guard removed 2026-07-27 (user-directed pre-publish arming). `cargo
-# publish` will proceed from this copy; the office lane keeps `publish = false`.
 
 [package.metadata.gubernaut]
 # Concept (all-versions) DOI — canonical citation target for the packages.
