@@ -26,11 +26,11 @@ completion, **zero upstream tokens.** Benign traffic passes through untouched.
 ## The finding
 
 On a saturating loop the governed arm pays **4.1% to 20.2%** of the ungoverned bill across
-the seven model families tested, with the hard stop landing at turn 4 every run.
+seven measured configurations across four model families, with the hard stop landing at turn 4 every run.
 
 Both arms make the same number of attempts. The spend delta is the entire measurement.
 
-![Governed spend as % of ungoverned across seven model families](receipts_matrix_chart.svg)
+![Governed spend as % of ungoverned across seven measured configurations spanning four model families](receipts_matrix_chart.svg)
 
 | | Ungoverned | Governed | Governed as % |
 | --- | --- | --- | --- |

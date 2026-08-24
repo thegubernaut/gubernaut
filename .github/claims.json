@@ -1,8 +1,15 @@
 {
   "$comment": "The claims register for this repository. Derived from the sealed register that governs gubernaut.com (astro-site/src/data/facts.json). Numbers change THERE first, then here. Enforced by tools/claims_check.py on every push and pull request.",
   "derived_from": "gubernaut.com sealed register, facts.json",
-  "synced": "2026-08-01",
+  "synced": "2026-08-24",
   "banned_strings": {
+    "18080": {
+      "why": "Internal test-harness port. The proxy default is 8000 and :18080 never appears in public copy.",
+      "only_in": [
+        "**/*.md"
+      ],
+      "$comment_scope": "Prose only. bench/ and the example harnesses bind this port in working code, and renaming a functional port to satisfy a copy rule would be theatre. The rule is about what a reader is told, not what a test binds."
+    },
     "$comment": "Exact substrings. Case-sensitive. Each carries the reason it is banned, which is printed on failure so the message teaches rather than scolds.",
     "$0.1670": {
       "why": "The scored flagship value is $0.1669 (raw 0.16695). Never round up.",
@@ -32,15 +39,20 @@
     "10.5281/zenodo.21303519": "Version DOI. Frozen-record only. Copy uses the concept DOI 10.5281/zenodo.21303518.",
     "10.5281/zenodo.21355030": "Version DOI. Frozen-record only. Copy uses the concept DOI 10.5281/zenodo.21303518.",
     "openai.api_base =": "Current OpenAI SDKs ignore this attribute silently, so a client configured that way goes upstream ungoverned with no error. The attribute is base_url. Naming api_base in a warning is fine; assigning it is not. LlamaIndex's own api_base= constructor argument is a different API and is allowed.",
-    "18080": {
-      "why": "Internal test-harness port. The proxy default is 8000 and :18080 never appears in public copy.",
+    "9/9": "The validation result is 15 of 16 cells. 9/9 has never been a Gubernaut figure.",
+    "test the live runtime": "The demo is a recorded replay. No call to action may imply live inference.",
+    "seven model families": {
+      "why": "The unit is \"seven measured configurations across four model families\". Seven CONFIGURATIONS were measured across FOUR lineages, and the two are different scientific claims about the same benchmark. A reader who counts the rows can disprove the wrong one. Banned on the site 2026-08-07; added here 2026-08-24.",
       "only_in": [
         "**/*.md"
-      ],
-      "$comment_scope": "Prose only. bench/ and the example harnesses bind this port in working code, and renaming a functional port to satisfy a copy rule would be theatre. The rule is about what a reader is told, not what a test binds."
+      ]
     },
-    "9/9": "The validation result is 15 of 16 cells. 9/9 has never been a Gubernaut figure.",
-    "test the live runtime": "The demo is a recorded replay. No call to action may imply live inference."
+    "up to 96%": {
+      "why": "The retired savings ceiling. The sealed value is \"up to 95.9%\", which is a ceiling AND unrounded. 95.9 <= 96 so the old bound was true, which is exactly why it survived scrutiny, but it rounded the single most-quoted figure up on a project whose whole claim is that every figure traces to a source. Retired by user directive 2026-08-24.",
+      "only_in": [
+        "**/*.md"
+      ]
+    }
   },
   "banned_words": {
     "$comment": "Word-boundary matched, case-insensitive. negated_ok lists substrings that make an occurrence legitimate, which is how the required disclaimer 'Gubernaut is not injection-proof' survives the injection-proof rule. Without that, the gate fails the very sentence it exists to protect.",
@@ -135,6 +147,17 @@
         "null"
       ],
       "why": "Any statement of 15/16 must also carry 13/16 at p<.05 and show the null cell. Never 'all', never rounded up."
+    },
+    {
+      "$comment": "The savings ceiling never travels alone. Added 2026-08-24 with the ceiling change.",
+      "if_any": [
+        "95.9%",
+        "up to 95.9"
+      ],
+      "then_all": [
+        "79.8"
+      ],
+      "why": "A ceiling without its floor reads as a typical result rather than a best case. The pair is 79.8% at worst and up to 95.9% at best, on the verbatim-loop battery."
     }
   ],
   "social_proof_patterns": {
@@ -237,5 +260,6 @@
       "npm (?:install|i|add)\\s+{name}@(?P<ver>\\d+\\.\\d+\\.\\d+)",
       "^\\s*{name}\\s*=\\s*\\\"(?P<ver>\\d+\\.\\d+\\.\\d+)\\\"\\s*$"
     ]
-  }
+  },
+  "$comment_resync": "RESYNCED 2026-08-24 from the site register. The 2026-08-01 sync had drifted, and the drift was not theoretical: \"seven model families\" was banned on the site on 2026-08-07 and this file never learned it, so five instances stayed live in this repository through a green CI gate for seventeen days, including one in CONTRIBUTING.md that taught the wrong qualifier to every contributor. A gate that does not know a rule is not enforcing it."
 }

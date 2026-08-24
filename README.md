@@ -1,8 +1,15 @@
 # Gubernaut 1.0
 
-**A deterministic runtime governor for LLM agents.** It sits in front of your model as a
-local, OpenAI-compatible proxy and hard-stops runaway agent loops before they reach your
-API bill.
+**Your agent stopped making progress. The bill did not.**
+
+An agent retries a failed tool call word for word. Each retry sends the whole conversation
+back, and you pay for all of it, every time. Nothing inside the loop knows it is a loop.
+You find out from the bill.
+
+Gubernaut is a deterministic runtime governor for LLM agents. It sits in front of your
+model as a local, OpenAI-compatible proxy, reads three bounded numbers per turn and none of
+your text, and hard-stops a saturating loop before the request is sent. A stopped turn
+calls no upstream, so it costs nothing.
 
 Start the governor, then change one line in your code:
 
@@ -31,10 +38,10 @@ One product, four ways in. Pick the row that matches your stack.
 
 | | Install | Use it for |
 | --- | --- | --- |
-| **Python** · start here | `pip install gubernaut-sdk==1.0.1` | The reference implementation. The proxy, the controller, the CLI. Any OpenAI-compatible client. |
-| **Rust** · for performance | `cargo add gubernaut-core@1.0.1` | The controller on its own, no network. Compiles to wasm and runs on the edge. |
-| **JS/TS** · no proxy needed | `npm install @gubernaut/core@1.0.1` | The same wasm controller, in-process. Node, Deno, Bun, workerd, the browser. |
-| **Node** · ElizaOS | `npm install @gubernaut/plugin-gcc@1.0.1` | ElizaOS agents and on-chain runtimes. |
+| **Python** · start here | `pip install gubernaut-sdk` | The reference implementation. The proxy, the controller, the CLI. Any OpenAI-compatible client. |
+| **Rust** · for performance | `cargo add gubernaut-core` | The controller on its own, no network. Compiles to wasm and runs on the edge. |
+| **JS/TS** · no proxy needed | `npm install @gubernaut/core` | The same wasm controller, in-process. Node, Deno, Bun, workerd, the browser. |
+| **Node** · ElizaOS | `npm install @gubernaut/plugin-gcc` | ElizaOS agents and on-chain runtimes. |
 
 > **Renamed at 1.0.1:** the Rust crate was `gcc-core`. "gcc" is unsearchable next to the GNU
 > Compiler Collection. `gcc-core` 1.0.0 is **not yanked**, and `gcc-core` 1.0.1 is a shim
@@ -87,8 +94,14 @@ a dead proxy, installed from the published artifacts only.
 
 Each turn, the controller reads **three bounded numbers**, *intensity*, *valence* and
 *repetition*, and nothing else. No raw text crosses into the control layer, so the layer is
-**token-free by construction**: no prompt injection can steer it, because no token sequence
-ever reaches it.
+**token-free by construction**: no token sequence ever reaches it, and the meta level
+rejects every non-numeric input at the type boundary. Across **324 of 324** constructed
+telemetry-matched payload pairs, plain against injection, the controller committed
+byte-identical postures.
+
+> **Scope.** That is claimed for the **controller** only. The arbiter that composes the
+> reply reads raw text by necessity. Gubernaut is not injection-proof, and the full
+> boundary is in [What it does not do](#what-it-does-not-do) below.
 
 From those three numbers it holds a posture:
 
@@ -115,7 +128,10 @@ make the same number of attempts**, so the spend delta is the entire measurement
 | --- | --- | --- | --- |
 | GPT-5.6 Sol, 25-attempt verbatim loop | $0.1669 | **$0.0068** | 4.1% |
 | Claude Fable 5, same battery | $0.3861 | **$0.0203** | 5.2% |
-| Across seven model families | | | **4.1% to 20.2%** |
+| Across seven measured configurations, four model families | | | **4.1% to 20.2%** |
+
+Stated as savings, that range is **79.8% at worst and up to 95.9% at best**. The ceiling is
+the GPT-5.6 Sol row exactly, unrounded, and it never travels without the floor beside it.
 
 The hard stop lands at **turn 4** in every run, with the first posture change at turn 3,
 identical across runs, because the controller is input-deterministic.

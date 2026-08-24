@@ -84,7 +84,7 @@ issue you file and the release note.
 - **A figure that is not a script output does not go in.** Not an estimate, not a
   reasonable-sounding round number.
 - **A number travels with its qualifier**, in the same sentence or the one beside it.
-  "4.1% to 20.2%" needs "on the verbatim-loop battery, across seven model families".
+  "4.1% to 20.2%" needs "on the verbatim-loop battery, across seven measured configurations across four model families".
   Latency needs its scope, and the three latency figures are not interchangeable.
 - **Never round up.** The flagship is `$0.1669`, not `$0.1670`.
 - **Never "all".** The validation result is 15 of 16 cells, and any statement of it carries
