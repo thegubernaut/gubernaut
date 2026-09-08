@@ -1,5 +1,8 @@
 # gubernaut-sdk
 
+**Gubernaut Tiller** is the product name for this package. It installs as `gubernaut-sdk`,
+unchanged.
+
 **A deterministic runtime governor for LLM agents**, packaged as an OpenAI-compatible local
 proxy. It hard-stops runaway agent loops before they reach your API bill.
 

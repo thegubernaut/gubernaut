@@ -1,7 +1,8 @@
 # @gubernaut/plugin-gcc
 
 An **ElizaOS plugin** that routes an agent's LLM calls through the **Gubernaut Cognitive
-Controller** local proxy. Registering it makes every
+Controller** local proxy, the same proxy sold under the product name **Gubernaut Tiller**
+(`gubernaut-sdk`). Registering it makes every
 `runtime.useModel(ModelType.TEXT_LARGE | TEXT_SMALL, ...)` call flow through the governor,
 which adds:
 

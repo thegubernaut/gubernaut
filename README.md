@@ -34,14 +34,19 @@ client = OpenAI(base_url="http://localhost:8000/v1")   # the one line of adoptio
 
 ## Start here
 
-One product, four ways in. Pick the row that matches your stack.
+One engine, two named products, one held lane. Pick the row that matches your stack.
 
-| | Install | Use it for |
-| --- | --- | --- |
-| **Python** · start here | `pip install gubernaut-sdk` | The reference implementation. The proxy, the controller, the CLI. Any OpenAI-compatible client. |
-| **Rust** · for performance | `cargo add gubernaut-core` | The controller on its own, no network. Compiles to wasm and runs on the edge. |
-| **JS/TS** · no proxy needed | `npm install @gubernaut/core` | The same wasm controller, in-process. Node, Deno, Bun, workerd, the browser. |
-| **Node** · ElizaOS | `npm install @gubernaut/plugin-gcc` | ElizaOS agents and on-chain runtimes. |
+| | Product | Install | Use it for |
+| --- | --- | --- | --- |
+| **Python** · start here | **Gubernaut Tiller** | `pip install gubernaut-sdk` | The reference implementation. The proxy, the controller, the CLI. Any OpenAI-compatible client. |
+| **Rust** · for performance | unnamed, held | `cargo add gubernaut-core` | The controller on its own, no network. Compiles to wasm and runs on the edge. |
+| **JS/TS** · no proxy needed | **Gubernaut Keel** | `npm install @gubernaut/core` | The same wasm controller, in-process. Node, Deno, Bun, workerd, the browser. |
+| **Node** · ElizaOS | proxy client (Tiller) | `npm install @gubernaut/plugin-gcc` | ElizaOS agents and on-chain runtimes, routed through the proxy. |
+
+**Gubernaut Tiller** and **Gubernaut Keel** are product names for two of these four
+packages. Neither changes what you install: Tiller is `gubernaut-sdk`, verbatim; Keel is
+`@gubernaut/core`, verbatim. The Rust crate (`gubernaut-core` on crates.io) is published,
+and is what Keel's wasm compiles from, but does not carry a product name of its own yet.
 
 > **Renamed at 1.0.1:** the Rust crate was `gcc-core`. "gcc" is unsearchable next to the GNU
 > Compiler Collection. `gcc-core` 1.0.0 is **not yanked**, and `gcc-core` 1.0.1 is a shim
@@ -232,11 +237,11 @@ A result that disagrees with ours is more useful to us than one that agrees.
 
 | Path | Contents |
 | --- | --- |
-| [`packages/python/`](packages/python/) | `gubernaut-sdk`. Proxy engine, controller, CLI, one-call facade |
-| [`packages/rust/`](packages/rust/) | `gubernaut-core`. The Rust controller, also compiles to wasm |
+| [`packages/python/`](packages/python/) | `gubernaut-sdk`, **Gubernaut Tiller**. Proxy engine, controller, CLI, one-call facade |
+| [`packages/rust/`](packages/rust/) | `gubernaut-core`. The Rust controller, also compiles to wasm. Unnamed, held |
 | [`packages/rust-shim/`](packages/rust-shim/) | `gcc-core` 1.0.1. Deprecation shim re-exporting `gubernaut-core` |
-| [`packages/core-js/`](packages/core-js/) | `@gubernaut/core`. The same wasm controller for JS/TS |
-| [`packages/node/`](packages/node/) | `@gubernaut/plugin-gcc`. The ElizaOS plugin |
+| [`packages/core-js/`](packages/core-js/) | `@gubernaut/core`, **Gubernaut Keel**. The same wasm controller for JS/TS |
+| [`packages/node/`](packages/node/) | `@gubernaut/plugin-gcc`. The ElizaOS plugin, a client of Tiller |
 | [`examples/`](examples/) | Per-framework demos: OpenAI SDK, LangChain, LlamaIndex, AutoGen, ElizaOS |
 | [`bench/`](bench/) | Latency harness and the real-upstream soak |
 | [`receipts/`](receipts/) | **The evidence.** Spend receipts, the on-chain devnet run, and the engineering corpus: soaks, latency, concurrency, hardening, ablation |

@@ -1,5 +1,8 @@
 # @gubernaut/core
 
+**Gubernaut Keel** is the product name for this package. It installs as `@gubernaut/core`,
+unchanged.
+
 **The Gubernaut controller, in-process, for JavaScript.** A deterministic runtime governor
 for LLM agents: it reads three bounded numbers per turn, no tokens, and tells you whether
 the agent is fine, escalating, or stuck in a loop you should stop paying for.
