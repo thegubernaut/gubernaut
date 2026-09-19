@@ -6,12 +6,14 @@ An agent retries a failed tool call word for word. Each retry sends the whole co
 back, and you pay for all of it, every time. Nothing inside the loop knows it is a loop.
 You find out from the bill.
 
-Gubernaut is a deterministic runtime governor for LLM agents. It sits in front of your
-model as a local, OpenAI-compatible proxy, reads three bounded numbers per turn and none of
-your text, and hard-stops a saturating loop before the request is sent. A stopped turn
-calls no upstream, so it costs nothing.
+Gubernaut is a deterministic runtime governor for LLM agents. It reads three bounded
+numbers per turn and none of your text, and decides when a saturating loop must stop.
+**Gubernaut Tiller** runs it as a local, OpenAI-compatible proxy in front of your model and
+hard-stops the turn itself, before the request is sent: a stopped turn calls no upstream, so
+it costs nothing. **Gubernaut Keel** runs it inside your own program, and your code acts on
+the decision.
 
-Start the governor, then change one line in your code:
+Start Tiller, then change one line in your code:
 
 ```bash
 gubernaut-proxy --upstream https://api.openai.com     # binds 127.0.0.1:8000
@@ -34,19 +36,26 @@ client = OpenAI(base_url="http://localhost:8000/v1")   # the one line of adoptio
 
 ## Start here
 
-One engine, two named products, one held lane. Pick the row that matches your stack.
+One controller, two products, split by how they run.
 
-| | Product | Install | Use it for |
+- **Gubernaut Tiller** is the proxy: a separate process your agent's model calls pass
+  through. It stops a looping call itself, on the wire.
+- **Gubernaut Keel** is the controller inside your program. It decides, and your own code
+  acts on the decision. No proxy, no network hop.
+
+One question picks between them: should it stop the call itself, or should the decision sit
+inside your code?
+
+| Product | How it runs | Install | Use it for |
 | --- | --- | --- | --- |
-| **Python** · start here | **Gubernaut Tiller** | `pip install gubernaut-sdk` | The reference implementation. The proxy, the controller, the CLI. Any OpenAI-compatible client. |
-| **Rust** · for performance | unnamed, held | `cargo add gubernaut-core` | The controller on its own, no network. Compiles to wasm and runs on the edge. |
-| **JS/TS** · no proxy needed | **Gubernaut Keel** | `npm install @gubernaut/core` | The same wasm controller, in-process. Node, Deno, Bun, workerd, the browser. |
-| **Node** · ElizaOS | proxy client (Tiller) | `npm install @gubernaut/plugin-gcc` | ElizaOS agents and on-chain runtimes, routed through the proxy. |
+| **Gubernaut Tiller** · start here | a proxy, its own process | `pip install gubernaut-sdk` | The reference implementation: the proxy, the controller, the CLI. Language-neutral: any OpenAI-compatible client can point at it. |
+| Tiller client · ElizaOS | talks to the proxy | `npm install @gubernaut/plugin-gcc` | ElizaOS agents and on-chain runtimes, routed through the proxy. It does nothing without the proxy running. |
+| **Gubernaut Keel** · JS/TS | in-process | `npm install @gubernaut/core` | The same wasm controller inside your program. Node, Deno, Bun, workerd, the browser. |
+| **Gubernaut Keel** · Rust | in-process | `cargo add gubernaut-core` | The controller as a Rust library, no network. Keel's wasm is compiled from it. |
 
-**Gubernaut Tiller** and **Gubernaut Keel** are product names for two of these four
-packages. Neither changes what you install: Tiller is `gubernaut-sdk`, verbatim; Keel is
-`@gubernaut/core`, verbatim. The Rust crate (`gubernaut-core` on crates.io) is published,
-and is what Keel's wasm compiles from, but does not carry a product name of its own yet.
+The product names change nothing you install: every command above is the one that has always
+worked. Each product has its own page: [gubernaut.com/tiller](https://gubernaut.com/tiller)
+and [gubernaut.com/keel](https://gubernaut.com/keel).
 
 > **Renamed at 1.0.1:** the Rust crate was `gcc-core`. "gcc" is unsearchable next to the GNU
 > Compiler Collection. `gcc-core` 1.0.0 is **not yanked**, and `gcc-core` 1.0.1 is a shim
@@ -127,7 +136,8 @@ Details: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) · [docs/POSTURES.md](docs
 ## The receipts
 
 On a saturating loop the governed arm pays a fraction of the ungoverned bill. **Both arms
-make the same number of attempts**, so the spend delta is the entire measurement.
+make the same number of attempts**, so the spend delta is the entire measurement. They
+were measured through the proxy, **Gubernaut Tiller**.
 
 | | Ungoverned | Governed | Governed as % |
 | --- | --- | --- | --- |
@@ -238,7 +248,7 @@ A result that disagrees with ours is more useful to us than one that agrees.
 | Path | Contents |
 | --- | --- |
 | [`packages/python/`](packages/python/) | `gubernaut-sdk`, **Gubernaut Tiller**. Proxy engine, controller, CLI, one-call facade |
-| [`packages/rust/`](packages/rust/) | `gubernaut-core`. The Rust controller, also compiles to wasm. Unnamed, held |
+| [`packages/rust/`](packages/rust/) | `gubernaut-core`, **Gubernaut Keel** for Rust. The controller as a library; Keel's wasm compiles from it |
 | [`packages/rust-shim/`](packages/rust-shim/) | `gcc-core` 1.0.1. Deprecation shim re-exporting `gubernaut-core` |
 | [`packages/core-js/`](packages/core-js/) | `@gubernaut/core`, **Gubernaut Keel**. The same wasm controller for JS/TS |
 | [`packages/node/`](packages/node/) | `@gubernaut/plugin-gcc`. The ElizaOS plugin, a client of Tiller |

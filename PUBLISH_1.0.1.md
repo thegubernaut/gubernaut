@@ -50,6 +50,6 @@ parsed response, the client-object adoption form present, `with_raw_response` pr
 ## The site
 
 `gubernaut.com` points at 1.0.1 and was redeployed and verified: the hero install command
-reads `pip install gubernaut-sdk==1.0.1`, `/releases` carries a `1.0.1` entry above the
+pinned `gubernaut-sdk` to 1.0.1, `/releases` carries a `1.0.1` entry above the
 `1.0.0` one, and npm and crates.io still read 1.0.0 because they are versioned
 independently and were unaffected.

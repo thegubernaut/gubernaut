@@ -10,7 +10,7 @@
 | Where | Form | Example |
 |---|---|---|
 | Prose, READMEs, quickstarts, the site, any marketing surface | **unpinned** | `pip install gubernaut-sdk` |
-| A version matrix whose job is to record what "current" means | **pinned** | `pip install gubernaut-sdk==1.0.1` |
+| A version matrix whose job is to record what "current" means | **pinned** | `pip install gubernaut-sdk==1.0.2` |
 
 One pinned table per surface, and only where the pin is the point. Everywhere else the
 command carries no version.
@@ -64,9 +64,9 @@ the sealed register (`astro-site/src/data/facts.json`):
 ```json
 "crates": {
   "name": "gubernaut-core",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "install": "cargo add gubernaut-core",
-  "install_pinned": "cargo add gubernaut-core@1.0.1"
+  "install_pinned": "cargo add gubernaut-core@1.0.2"
 }
 ```
 

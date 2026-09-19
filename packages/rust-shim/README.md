@@ -4,7 +4,7 @@
 
 ```toml
 [dependencies]
-gubernaut-core = "1.0.1"
+gubernaut-core = "1"
 ```
 
 ```rust

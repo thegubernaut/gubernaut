@@ -1,7 +1,7 @@
 {
   "name": "@gubernaut/core",
-  "version": "1.0.1",
-  "description": "The Gubernaut controller, in-process, for JavaScript. A deterministic runtime governor for LLM agents that reads three bounded numbers and no tokens, and hard-stops runaway loops. Embedded wasm, no dependencies, runs in Node, Deno, Bun, workerd and the browser.",
+  "version": "1.0.2",
+  "description": "Gubernaut Keel for JavaScript: the controller in-process. A deterministic runtime governor for LLM agents that reads three bounded numbers and no tokens and decides when a runaway loop must stop; your code acts on the decision. Embedded wasm, no dependencies, runs in Node, Deno, Bun, workerd and the browser.",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -41,11 +41,13 @@
     "deterministic",
     "wasm",
     "edge",
-    "gubernaut"
+    "gubernaut",
+    "keel",
+    "gubernaut-keel"
   ],
   "author": "Gubernaut Research",
   "license": "Apache-2.0",
-  "homepage": "https://gubernaut.com",
+  "homepage": "https://gubernaut.com/keel",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thegubernaut/gubernaut.git",

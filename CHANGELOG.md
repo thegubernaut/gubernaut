@@ -6,6 +6,43 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 Published versions are immutable. A defect in a released version is corrected by shipping
 the next one, never by rewriting a published artifact.
 
+## [1.0.2] - unreleased, prepared 2026-09-18
+
+**Documentation and metadata only.** The one source line that changed is the version
+string in `gcc_proxy/__init__.py`, and nothing you install behaves differently. Four
+packages move to 1.0.2 so their registry pages carry the two product names, split by how
+they run. `gcc-core` stays at 1.0.1: its deprecation notice already points to
+`gubernaut-core`, and nothing on its page changes.
+
+### Changed
+
+- **Two products, named by how they run, not by language.**
+  - **Gubernaut Tiller** is the proxy: a separate process your agent's model calls pass
+    through, which stops a looping call itself. It is `gubernaut-sdk`. `@gubernaut/plugin-gcc`
+    is a Tiller client for ElizaOS.
+  - **Gubernaut Keel** is the controller inside your program: it decides, and your code acts
+    on the decision. It is `@gubernaut/core` for JavaScript and, new in this naming,
+    `gubernaut-core` for Rust.
+  - The 2026-09-08 naming called Tiller "the Python proxy" and left the Rust crate unnamed.
+    The proxy is language-neutral (any OpenAI-compatible client can point at it), and the
+    crate runs the controller in-process exactly as `@gubernaut/core` does, so both
+    descriptions were wrong.
+- READMEs: each package opens by saying which product it is and what the other one is.
+  The root README's table is organised by product.
+- Registry metadata: each description names its product; the npm and PyPI keywords add it;
+  the homepage of each package points to its product's page on gubernaut.com.
+- `@gubernaut/core`'s README pinned its install command to `@1.0.1`. It is unpinned, as
+  every prose install command already is (`docs/INSTALL_COMMAND_POLICY.md`).
+- `@gubernaut/plugin-gcc`'s lockfile recorded its own version as `0.1.0` through the 1.0.0
+  and 1.0.1 releases. It now matches the manifest.
+
+**The controller did not change.** No crate source was touched. The wasm drift check could
+not be run on the machine that prepared this release (no `wasm32` target there), so it is
+left to CI, and a green CI run is a precondition in `PUBLISH_1.0.2.md`. The expectation is
+that the bytes stay identical: the crate reads no version at compile time, and the 1.0.1
+rename changed the crate's name, which feeds the compiler the same way a version does, and
+left the wasm byte-identical.
+
 ## [1.0.1-sync] - 2026-08-07
 
 The three registries had drifted apart. PyPI was at 1.0.1; crates.io and npm were still at

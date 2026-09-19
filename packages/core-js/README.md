@@ -1,14 +1,17 @@
 # @gubernaut/core
 
-**Gubernaut Keel** is the product name for this package. It installs as `@gubernaut/core`,
-unchanged.
+**This package is Gubernaut Keel, for JavaScript.** The controller runs inside your own
+program: no proxy, no network hop. It decides, and your code acts on the decision. It installs
+as `@gubernaut/core`, unchanged, and Keel for Rust is the `gubernaut-core` crate. If you want
+a separate process that stops the call itself, that is **Gubernaut Tiller**
+(`gubernaut-sdk`). More: [gubernaut.com/keel](https://gubernaut.com/keel).
 
 **The Gubernaut controller, in-process, for JavaScript.** A deterministic runtime governor
 for LLM agents: it reads three bounded numbers per turn, no tokens, and tells you whether
 the agent is fine, escalating, or stuck in a loop you should stop paying for.
 
 ```bash
-npm install @gubernaut/core@1.0.1
+npm install @gubernaut/core
 ```
 
 ```js

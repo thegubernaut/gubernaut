@@ -38,11 +38,11 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
 
-PY_PKG, PY_VER = "gubernaut-sdk", "1.0.1"
-CRATE, CRATE_VER = "gubernaut-core", "1.0.1"
+PY_PKG, PY_VER = "gubernaut-sdk", "1.0.2"
+CRATE, CRATE_VER = "gubernaut-core", "1.0.2"
 SHIM, SHIM_VER = "gcc-core", "1.0.1"
-CORE_JS, CORE_JS_VER = "@gubernaut/core", "1.0.1"
-PLUGIN, PLUGIN_VER = "@gubernaut/plugin-gcc", "1.0.1"
+CORE_JS, CORE_JS_VER = "@gubernaut/core", "1.0.2"
+PLUGIN, PLUGIN_VER = "@gubernaut/plugin-gcc", "1.0.2"
 
 # The controller binary, unchanged since 0.1.1 and across the 1.0.1 rename.
 WASM_SHA256 = "834015d73e6576d6c597b5a32a62c24ac56a50c7023261bf84b96beb01ded7d8"

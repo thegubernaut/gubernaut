@@ -4,8 +4,9 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "gubernaut-sdk"
-version = "1.0.1"
-description = "Gubernaut SDK: a deterministic runtime governor for LLM agents. Drop-in local proxy (gcc_proxy) plus a one-call SDK facade (gubernaut_sdk) with framework config helpers."
+version = "1.0.2"
+description = "Gubernaut Tiller, the proxy: a deterministic runtime governor for LLM agents that hard-stops a runaway loop on the wire. Drop-in local OpenAI-compatible proxy (gcc_proxy) plus a one-call SDK facade (gubernaut_sdk) with framework config helpers."
+keywords = ["llm", "agents", "governance", "guardrails", "proxy", "agent-loop", "cost-control", "gubernaut", "gubernaut-tiller"]
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "Apache-2.0" }
@@ -17,7 +18,7 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://gubernaut.com"
+Homepage = "https://gubernaut.com/tiller"
 Repository = "https://github.com/thegubernaut/gubernaut"
 Issues = "https://github.com/thegubernaut/gubernaut/issues"
 Citation = "https://doi.org/10.5281/zenodo.21303518"

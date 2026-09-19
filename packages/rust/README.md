@@ -1,5 +1,10 @@
 # gubernaut-core
 
+**This crate is Gubernaut Keel, for Rust.** The controller runs inside your own program: it
+decides, and your code acts on the decision. `@gubernaut/core` is Keel for JavaScript, built
+from this crate's wasm. If you want a separate process that stops the call itself, that is
+**Gubernaut Tiller** (`gubernaut-sdk`). More: [gubernaut.com/keel](https://gubernaut.com/keel).
+
 **The Gubernaut controller, compiled.** A bit-exact Rust port of the Python reference
 controller: the same IEEE-754 f64 operations in the same order, verified by a golden-trace
 parity test. No runtime dependencies, `#![deny(unsafe_code)]`, and it compiles to wasm.

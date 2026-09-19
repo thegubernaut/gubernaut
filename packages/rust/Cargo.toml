@@ -8,15 +8,15 @@
 # The controller itself did not change. The compiled wasm is byte-identical
 # across the rename — see CHANGELOG 1.0.1-sync.
 name = "gubernaut-core"
-version = "1.0.1"
+version = "1.0.2"
 edition = "2021"
-description = "Deterministic runtime governor for LLM agents: the meta-level controller (HRL), with golden-trace parity to the Python reference. Compiles to wasm."
+description = "Gubernaut Keel for Rust: the deterministic runtime governor for LLM agents, in-process. The meta-level controller (HRL), with golden-trace parity to the Python reference. Compiles to wasm."
 license = "Apache-2.0"
 readme = "README.md"
 keywords = ["llm", "agents", "governance", "wasm", "deterministic"]
 categories = ["wasm", "algorithms", "science"]
 repository = "https://github.com/thegubernaut/gubernaut"
-homepage = "https://gubernaut.com"
+homepage = "https://gubernaut.com/keel"
 
 [package.metadata.gubernaut]
 # Concept (all-versions) DOI — canonical citation target for the packages.
