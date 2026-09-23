@@ -1,3 +1,5 @@
+// Build config for @gubernaut/plugin-gcc, the ElizaOS plugin. It is a client of the Gubernaut
+// Tiller proxy and governs nothing without the proxy running.
 import { defineConfig } from "tsup";
 
 export default defineConfig({
