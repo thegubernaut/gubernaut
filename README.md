@@ -27,14 +27,15 @@ client = OpenAI(base_url="http://localhost:8000/v1")   # the one line of adoptio
 
 ## Start here
 
-One product, four ways in. Pick the row that matches your stack.
+One controller, two ways to run it, four packages. **Gubernaut Tiller** is the proxy; **Gubernaut Keel** is
+the same decision in-process. Pick the row that matches your stack.
 
 | | Install | Use it for |
 | --- | --- | --- |
-| **Python** · start here | `pip install gubernaut-sdk==1.0.1` | The reference implementation. The proxy, the controller, the CLI. Any OpenAI-compatible client. |
-| **Rust** · for performance | `cargo add gubernaut-core@1.0.1` | The controller on its own, no network. Compiles to wasm and runs on the edge. |
-| **JS/TS** · no proxy needed | `npm install @gubernaut/core@1.0.1` | The same wasm controller, in-process. Node, Deno, Bun, workerd, the browser. |
-| **Node** · ElizaOS | `npm install @gubernaut/plugin-gcc@1.0.1` | ElizaOS agents and on-chain runtimes. |
+| **Python** · start here · Tiller | `pip install gubernaut-sdk==1.0.1` | The reference implementation. The proxy, the controller, the CLI. Any OpenAI-compatible client. |
+| **Rust** · for performance · Keel | `cargo add gubernaut-core@1.0.1` | The controller on its own, no network. Compiles to wasm and runs on the edge. |
+| **JS/TS** · no proxy needed · Keel | `npm install @gubernaut/core@1.0.1` | The same wasm controller, in-process. Node, Deno, Bun, workerd, the browser. |
+| **Node** · ElizaOS · a Tiller client | `npm install @gubernaut/plugin-gcc@1.0.1` | ElizaOS agents and on-chain runtimes. |
 
 > **Renamed at 1.0.1:** the Rust crate was `gcc-core`. "gcc" is unsearchable next to the GNU
 > Compiler Collection. `gcc-core` 1.0.0 is **not yanked**, and `gcc-core` 1.0.1 is a shim
@@ -88,7 +89,18 @@ a dead proxy, installed from the published artifacts only.
 Each turn, the controller reads **three bounded numbers**, *intensity*, *valence* and
 *repetition*, and nothing else. No raw text crosses into the control layer, so the layer is
 **token-free by construction**: no prompt injection can steer it, because no token sequence
-ever reaches it.
+ever reaches it. That boundary is architectural and not yet adversarially tested, and it covers
+the controller only: the part that writes the reply reads text by necessity, and its compliance
+is measured rather than assumed.
+
+```mermaid
+flowchart LR
+  A["Your agent<br/>any OpenAI-compatible client"] -->|"request + visible history"| P["Gubernaut proxy<br/>127.0.0.1:8000"]
+  P -->|"three numbers:<br/>intensity, valence, repetition"| C["Controller<br/>deterministic, token-free"]
+  C -->|"posture"| P
+  P -->|"DEFAULT or INHIBIT:<br/>the governed call"| U["Upstream model"]
+  P -. "REGROUND, persisting:<br/>hard stop, fallback reply,<br/>zero upstream tokens" .-> A
+```
 
 From those three numbers it holds a posture:
 
@@ -115,7 +127,7 @@ make the same number of attempts**, so the spend delta is the entire measurement
 | --- | --- | --- | --- |
 | GPT-5.6 Sol, 25-attempt verbatim loop | $0.1669 | **$0.0068** | 4.1% |
 | Claude Fable 5, same battery | $0.3861 | **$0.0203** | 5.2% |
-| Across seven model families | | | **4.1% to 20.2%** |
+| Across seven measured configurations, four model families | | | **4.1% to 20.2%** |
 
 The hard stop lands at **turn 4** in every run, with the first posture change at turn 3,
 identical across runs, because the controller is input-deterministic.

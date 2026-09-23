@@ -40,7 +40,13 @@
       "$comment_scope": "Prose only. bench/ and the example harnesses bind this port in working code, and renaming a functional port to satisfy a copy rule would be theatre. The rule is about what a reader is told, not what a test binds."
     },
     "9/9": "The validation result is 15 of 16 cells. 9/9 has never been a Gubernaut figure.",
-    "test the live runtime": "The demo is a recorded replay. No call to action may imply live inference."
+    "test the live runtime": "The demo is a recorded replay. No call to action may imply live inference.",
+    "seven model families": {
+      "why": "The verbatim-loop battery is seven measured configurations across FOUR model families (OpenAI, Anthropic, Meta, Google). 'Family' means lineage everywhere in this project. The sealed register fixed this on 2026-08-07 (receipts.verbatim_loop_unit); this repository caught up on 2026-09-23.",
+      "negated_ok": [
+        "Not \"seven model families\""
+      ]
+    }
   },
   "banned_words": {
     "$comment": "Word-boundary matched, case-insensitive. negated_ok lists substrings that make an occurrence legitimate, which is how the required disclaimer 'Gubernaut is not injection-proof' survives the injection-proof rule. Without that, the gate fails the very sentence it exists to protect.",

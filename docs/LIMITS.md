@@ -73,7 +73,7 @@ way rather than rounded into the headline.
 
 The receipts measure a **saturating loop**, which is the failure mode Gubernaut exists to
 stop. On that battery the governed arm pays 4.1% to 20.2% of the ungoverned bill across
-seven model families.
+seven measured configurations across four model families.
 
 That is a ceiling on a specific pathology. It is not a general claim about your bill.
 

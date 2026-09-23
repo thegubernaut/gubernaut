@@ -9,13 +9,14 @@ copy. Every number here is a script output you can re-run from the source.*
 
 ---
 
-## The one-line adoption
+## Adopting it: start the proxy, then change one line
 
 ```python
 client = OpenAI(base_url="http://localhost:8000/v1")   # the Gubernaut local proxy
 ```
 
-Start it first with `gcc-proxy --upstream https://api.openai.com`, which binds that port.
+Start it first with `gubernaut-proxy --upstream https://api.openai.com`, which binds that port.
+(`gcc-proxy` is the same command under its original name, and still works.)
 
 A deterministic homeostatic controller reads three bounded numbers per turn, intensity,
 valence and repetition, and nothing else. No prompt can steer it, because no token sequence
@@ -26,11 +27,11 @@ completion, **zero upstream tokens.** Benign traffic passes through untouched.
 ## The finding
 
 On a saturating loop the governed arm pays **4.1% to 20.2%** of the ungoverned bill across
-the seven model families tested, with the hard stop landing at turn 4 every run.
+the seven measured configurations across four model families tested, with the hard stop landing at turn 4 every run.
 
 Both arms make the same number of attempts. The spend delta is the entire measurement.
 
-![Governed spend as % of ungoverned across seven model families](receipts_matrix_chart.svg)
+![Governed spend as % of ungoverned across seven measured configurations across four model families](receipts_matrix_chart.svg)
 
 | | Ungoverned | Governed | Governed as % |
 | --- | --- | --- | --- |

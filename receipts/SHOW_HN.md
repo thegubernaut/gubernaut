@@ -101,8 +101,8 @@ every one of 30 runs to a calm baseline by turn 6 with monotonically
 decaying arousal — identical across all three models, because the controller
 reads only the conversation's shape, not the model.
 
-![Governed spend as a percentage of ungoverned across seven model families on
-the verbatim loop trap — every family lands between 4.1% and 20.2%](receipts_matrix_chart.svg)
+![Governed spend as a percentage of ungoverned across seven measured configurations across four model families on
+the verbatim loop trap: every configuration lands between 4.1% and 20.2%](receipts_matrix_chart.svg)
 
 *(Rendered by `render_chart.py` from `receipts_matrix_chart.json` — the only
 figure source, so the picture cannot drift from the scored numbers. OpenRouter
