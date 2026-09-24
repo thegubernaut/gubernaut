@@ -109,7 +109,7 @@ than only at the headline.
 
 **What to expect, and the qualifiers that travel with it:**
 
-- Governed spend lands between **4.1% and 20.2%** of ungoverned across the seven families
+- Governed spend lands between **4.1% and 20.2%** of ungoverned across the seven measured configurations across four model families
   tested, on the verbatim-loop battery.
 - Flagship: GPT-5.6 Sol, 25-attempt verbatim loop, **$0.1669 ungoverned against $0.0068
   governed**, 4.1%.

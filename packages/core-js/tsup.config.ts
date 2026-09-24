@@ -1,3 +1,5 @@
+// Build config for @gubernaut/core, Gubernaut Keel in JavaScript: ESM and CJS with types,
+// loadable unchanged in Node, Deno, Bun, Cloudflare workerd and the browser.
 import { defineConfig } from "tsup";
 
 export default defineConfig({

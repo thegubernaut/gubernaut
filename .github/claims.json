@@ -45,6 +45,9 @@
       "why": "The unit is \"seven measured configurations across four model families\". Seven CONFIGURATIONS were measured across FOUR lineages, and the two are different scientific claims about the same benchmark. A reader who counts the rows can disprove the wrong one. Banned on the site 2026-08-07; added here 2026-08-24.",
       "only_in": [
         "**/*.md"
+      ],
+      "negated_ok": [
+        "Not \"seven model families\""
       ]
     },
     "up to 96%": {

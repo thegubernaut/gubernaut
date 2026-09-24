@@ -111,11 +111,21 @@ Each turn, the controller reads **three bounded numbers**, *intensity*, *valence
 **token-free by construction**: no token sequence ever reaches it, and the meta level
 rejects every non-numeric input at the type boundary. Across **324 of 324** constructed
 telemetry-matched payload pairs, plain against injection, the controller committed
-byte-identical postures.
+byte-identical postures. The controller's zero-token boundary is architectural and not yet
+adversarially tested. No jailbreak success-rate figure exists, because none was measured.
 
 > **Scope.** That is claimed for the **controller** only. The arbiter that composes the
 > reply reads raw text by necessity. Gubernaut is not injection-proof, and the full
 > boundary is in [What it does not do](#what-it-does-not-do) below.
+
+```mermaid
+flowchart LR
+  A["Your agent<br/>any OpenAI-compatible client"] -->|"request + visible history"| P["Gubernaut proxy<br/>127.0.0.1:8000"]
+  P -->|"three numbers:<br/>intensity, valence, repetition"| C["Controller<br/>deterministic, token-free"]
+  C -->|"posture"| P
+  P -->|"DEFAULT or INHIBIT:<br/>the governed call"| U["Upstream model"]
+  P -. "REGROUND, persisting:<br/>hard stop, fallback reply,<br/>zero upstream tokens" .-> A
+```
 
 From those three numbers it holds a posture:
 

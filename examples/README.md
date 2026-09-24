@@ -2,7 +2,7 @@
 
 Each demo proves the same two things through a different client stack:
 
-1. **Drop-in.** Adoption is one line: point the client's base URL at the proxy.
+1. **Drop-in.** Start the proxy, then change one line: point the client's base URL at it.
 2. **Runaway protection.** A 4x recursive loop is intercepted by the governor with a
    deterministic `[GCC]` fallback before any upstream spend.
 
