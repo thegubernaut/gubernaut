@@ -1,0 +1,17 @@
+# Added 2026-09-24. Matches what the tree already does; it changes no file on its own.
+root = true
+
+[*]
+charset = utf-8
+insert_final_newline = true
+indent_style = space
+indent_size = 2
+
+[*.{py,rs}]
+indent_size = 4
+
+[*.md]
+trim_trailing_whitespace = false
+
+[Makefile]
+indent_style = tab

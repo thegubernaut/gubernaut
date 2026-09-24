@@ -1,0 +1,24 @@
+# Proposes updates as pull requests; nothing merges or publishes on its own. Added 2026-09-24 with
+# the CI pins, so a pinned action does not quietly age.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+  - package-ecosystem: npm
+    directory: /packages/core-js
+    schedule:
+      interval: weekly
+  - package-ecosystem: npm
+    directory: /packages/node
+    schedule:
+      interval: weekly
+  - package-ecosystem: cargo
+    directory: /packages/rust
+    schedule:
+      interval: weekly
+  - package-ecosystem: pip
+    directory: /packages/python
+    schedule:
+      interval: weekly
