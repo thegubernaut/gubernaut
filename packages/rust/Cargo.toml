@@ -38,4 +38,4 @@ strip = true         # strip local/debug symbols (keeps #[no_mangle] exports)
 # float_roundtrip: serde_json's default float parse can be 1 ulp off; the
 # parity contract compares bits, so the golden reader must be exactly rounded.
 # Pinned to the lockfile version for a reproducible packaged verify build.
-serde_json = { version = "=1.0.150", features = ["float_roundtrip"] }
+serde_json = { version = "=1.0.151", features = ["float_roundtrip"] }
