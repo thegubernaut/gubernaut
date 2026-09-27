@@ -24,7 +24,7 @@ Issues = "https://github.com/thegubernaut/gubernaut/issues"
 Citation = "https://doi.org/10.5281/zenodo.21303518"
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0"]
+dev = ["pytest>=9.1.1"]
 
 [project.scripts]
 gcc-proxy = "gcc_proxy.__main__:main"
