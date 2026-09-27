@@ -52,8 +52,13 @@ jobs:
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       - uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87 # stable
+        # Pinned to the compiler that built the wasm core-js embeds (rustc 1.97.1, 8bab26f4f,
+        # named inside the blob). A newer stable emits different bytes for the same source:
+        # 1.98.0 gives df1f277f..., embed_wasm.mjs refuses it, and the embed check below has
+        # failed on every run since stable became 1.98.0 (2026-08-18). Moving this pin means
+        # re-embedding, which re-runs the parity corpus and the soak and says so in CHANGELOG.md.
         with:
-          toolchain: stable
+          toolchain: 1.97.1
           targets: wasm32-unknown-unknown
           components: clippy, rustfmt
       - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
