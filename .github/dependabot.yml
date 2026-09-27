@@ -1,5 +1,12 @@
 # Proposes updates as pull requests; nothing merges or publishes on its own. Added 2026-09-24 with
 # the CI pins, so a pinned action does not quietly age.
+#
+# Two limits, set 2026-09-26 after the first run opened eleven requests. The Python package is a
+# library: its dependency ranges are floors its users install against, and raising a floor because
+# a newer release exists only narrows what they can use, so pip proposes a change only when a new
+# release falls outside the range. And a TypeScript major changes the compiler that builds the
+# published JavaScript and its types, which is a reviewed change of its own, not a bot's; minor and
+# patch updates still come through.
 version: 2
 updates:
   - package-ecosystem: github-actions
@@ -10,15 +17,22 @@ updates:
     directory: /packages/core-js
     schedule:
       interval: weekly
+    ignore:
+      - dependency-name: typescript
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: npm
     directory: /packages/node
     schedule:
       interval: weekly
+    ignore:
+      - dependency-name: typescript
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: cargo
     directory: /packages/rust
     schedule:
       interval: weekly
   - package-ecosystem: pip
     directory: /packages/python
+    versioning-strategy: increase-if-necessary
     schedule:
       interval: weekly
