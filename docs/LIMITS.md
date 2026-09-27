@@ -128,6 +128,9 @@ It is reported everywhere the headline is reported, and it was not patched.
 
 ## Changing the configuration
 
-Every published number was measured with the default `GCCConfig`. Change a threshold, a
-gain or a decay constant and the published figures no longer describe your deployment. Say
-so when you report results.
+The engineering receipts use the default `GCCConfig`: the spend batteries, the loop-trap and
+fail-safe suites, the latency benchmark and the golden traces. The cross-family validation
+record used a held-out evaluated configuration; its scoring reproduces from the published
+panels, but its original run does not reproduce from these defaults. Change a threshold, a
+gain or a decay constant and the engineering receipts no longer describe your deployment.
+Say so when you report results.

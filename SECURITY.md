@@ -15,9 +15,8 @@ Use GitHub's [private vulnerability reporting](https://github.com/thegubernaut/g
 or email **contact@gubernaut.com** with `SECURITY` in the subject.
 
 Please include the version, the platform, what you expected, what happened, and a minimal
-reproduction if you have one. You will get an acknowledgement within a few days. This is a
-small project and the honest answer is that response time depends on the week, so if you
-have not heard back in a week, send a reminder.
+reproduction if you have one. This is a small project, so no response time is promised. If
+you have not heard back in a week, send a reminder.
 
 Report privately, give a reasonable window for a fix, and you will be credited in the
 advisory unless you would rather not be.
@@ -53,8 +52,8 @@ vulnerability reports. They are all worth discussing in an ordinary issue.
   directives do.
 - **The v0 lexicon sensor missing calmly worded hostility.** A known recall gap, measured
   at 5/5 missed on that corpus. A better sensor is the fix.
-- **A different result after changing `GCCConfig`.** The published numbers describe the
-  defaults.
+- **A different result after changing `GCCConfig`.** The engineering receipts describe the
+  defaults. The cross-family validation record used a held-out evaluated configuration.
 
 ## Handling of secrets
 

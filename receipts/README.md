@@ -51,7 +51,7 @@ Both arms make the same number of attempts. The spend delta is the entire measur
 ## Two cross-check notes, which travel with the data
 
 OpenRouter's own metered cost matched the token-price math for Haiku exactly and for Gemma
-within 13%, and flagged a **24% divergence for Llama 4 Scout** on provider routing. Scout's
+to within 12.6%, and flagged a **24% divergence for Llama 4 Scout** on provider routing. Scout's
 dollars are therefore the upstream's meter rather than the token math. The *ratio* is
 unaffected.
 
@@ -73,8 +73,8 @@ It is a regulation layer, measured and falsifiable, with no cognition claims.
 | | |
 |---|---|
 | [`telemetry/`](telemetry/) | the spend measurements above, per cell |
-| [`onchain/`](onchain/) | **the on-chain run.** A runaway retry loop severed at turn 4 on a local ephemeral EVM devnet, with real transaction hashes. 3 governed transactions against 8 ungoverned, and 210 concurrent agents all severed with 0 drops |
-| [`engineering/`](engineering/) | **the SDK evidence.** Edge soaks (5,037 and 10,000 ticks, bit-exact, flat memory), the three scoped latency figures, 240-way concurrency isolation, the fail-safe hardening round that found 4 leaks in our own code, and the "just a prompt" ablation |
+| [`onchain/`](onchain/) | **the on-chain run.** A runaway retry loop severed at turn 4 on a local ephemeral EVM devnet, with real transaction hashes. 3 governed transactions against 8 ungoverned, and 72 against 960 across 24 agents per arm |
+| [`engineering/`](engineering/) | **the SDK evidence.** The 10,000-tick edge soak, bit-exact with flat memory in workerd, a Node worker and Node main, the three scoped latency figures, 240-way concurrency isolation, the fail-safe hardening round that found 4 leaks in our own code, and the "just a prompt" ablation |
 | [`receipts_matrix_chart.svg`](receipts_matrix_chart.svg) | the rendered chart |
 | [`SHOW_HN.md`](SHOW_HN.md) | the launch write-up |
 

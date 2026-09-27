@@ -2,15 +2,15 @@
 
 **Your agent stopped making progress. The bill did not.**
 
-An agent retries a failed tool call word for word. Each retry sends the whole conversation
-back, and you pay for all of it, every time. Nothing inside the loop knows it is a loop.
-You find out from the bill.
+An agent sends the same request again, word for word. Each retry sends the whole
+conversation back, and you pay for all of it, every time. Nothing inside the loop knows it
+is a loop. You find out from the bill.
 
-Gubernaut is a deterministic runtime governor for LLM agents. It reads three bounded
-numbers per turn and none of your text, and decides when a saturating loop must stop.
-**Gubernaut Tiller** runs it as a local, OpenAI-compatible proxy in front of your model and
-hard-stops the turn itself, before the request is sent: a stopped turn calls no upstream, so
-it costs nothing. **Gubernaut Keel** runs it inside your own program, and your code acts on
+Gubernaut is a deterministic runtime governor for LLM agents. Its controller reads three
+bounded numbers per turn, never the text they came from, and decides when a saturating loop
+must stop. **Gubernaut Tiller** runs it as a local, OpenAI-compatible proxy in front of your
+model, derives those numbers locally from user-message text, and hard-stops the turn itself,
+before the request is sent: a stopped turn calls no upstream, so it costs nothing. **Gubernaut Keel** runs it inside your own program, and your code acts on
 the decision.
 
 Start Tiller, then change one line in your code:
@@ -135,9 +135,10 @@ From those three numbers it holds a posture:
 | `INHIBIT` | an escalating spiral gets an inhibitory instruction and a temperature clamp |
 | `REGROUND` | a saturating loop is broken. If it persists, the call is **hard-stopped locally**, returning a deterministic fallback completion with **zero upstream tokens** |
 
-State is re-derived per request by replaying the visible history, so the proxy is
-stateless, deterministic and fully replayable. Your `Authorization` header is forwarded
-verbatim and never stored.
+State is re-derived per request by replaying the user turns of the visible history, so the
+proxy is stateless, deterministic and fully replayable. Assistant and tool messages are not
+appraised, so a retry loop confined to those roles is outside what this detector covers.
+Your `Authorization` header is forwarded verbatim and never stored.
 
 Details: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) · [docs/POSTURES.md](docs/POSTURES.md)
 
@@ -145,9 +146,9 @@ Details: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) · [docs/POSTURES.md](docs
 
 ## The receipts
 
-On a saturating loop the governed arm pays a fraction of the ungoverned bill. **Both arms
+On a saturating loop the governed arm uses a fraction of the ungoverned spend. **Both arms
 make the same number of attempts**, so the spend delta is the entire measurement. They
-were measured through the proxy, **Gubernaut Tiller**.
+were measured through the proxy, **Gubernaut Tiller**, on the verbatim-loop battery.
 
 | | Ungoverned | Governed | Governed as % |
 | --- | --- | --- | --- |
@@ -157,6 +158,8 @@ were measured through the proxy, **Gubernaut Tiller**.
 
 Stated as savings, that range is **79.8% at worst and up to 95.9% at best**. The ceiling is
 the GPT-5.6 Sol row exactly, unrounded, and it never travels without the floor beside it.
+Gemini-native Gemma is free-tier only, so those rows are token deltas and carry no dollar
+claim.
 
 The hard stop lands at **turn 4** in every run, with the first posture change at turn 3,
 identical across runs, because the controller is input-deterministic.
@@ -174,14 +177,13 @@ submitted **8**, and stopped only because the harness capped it. The governed ba
 strictly greater, and every transaction has a real hash and gas receipt.
 
 Scaled up: 24 agents per arm produced **72 governed transactions against 960 ungoverned**,
-with all 24 governed agents severing at turn 4. Under 210 concurrent agents across three
-revert patterns, **210 severed, 0 drops**.
+with all 24 governed agents severing at turn 4.
 
 Full record with tx hashes: [`receipts/onchain/`](receipts/onchain/).
 
 ### "Could I not just put this in the system prompt?"
 
-Measured, pre-registered, same model, N=3:
+Measured, pre-registered, on GPT-5.6 Sol, N=3:
 
 | | Spend, as % of ungoverned baseline |
 | --- | --- |
@@ -190,6 +192,9 @@ Measured, pre-registered, same model, N=3:
 
 A static instruction not to loop costs more than doing nothing, because it lengthens every
 turn and the model still loops.
+
+On these RLHF-aligned frontier models the governed-vs-prompt-only warmth-recovery contrast
+was weak and mixed. No behavioral-tone headline is claimed.
 
 ---
 

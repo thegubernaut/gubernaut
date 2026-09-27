@@ -96,8 +96,11 @@ distribution comes from the Node worker.
 
 ## Configuration
 
-`Config` defaults match the Python reference and are the values every published figure was
-measured with. Change one and the published numbers no longer describe your deployment.
+`Config` defaults match the Python reference. The engineering receipts use them: the spend
+batteries, the loop-trap and fail-safe suites, the latency benchmark and the golden traces.
+The cross-family validation record used a held-out evaluated configuration; its scoring
+reproduces from the published panels, but its original run does not reproduce from these
+defaults. Change a default and the engineering receipts no longer describe your deployment.
 
 ## Citation and license
 

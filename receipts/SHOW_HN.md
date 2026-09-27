@@ -3,7 +3,7 @@
 *Status: FIGURES FILLED 2026-07-19 from `harness/report.py`, `score_v2.py`,
 and `matrix.py` output — two pre-registered runs, both scored **PASS**
 (`PREREG_2026-07-18_receipts_v1.md` §6/§7, gpt-5.6 + claude-fable-5; and
-`PREREG_2026-07-19_receipts_v2_multivendor.md` §6/§7, five more vendors).
+`PREREG_2026-07-19_receipts_v2_multivendor.md` §6/§7, additional measured configurations).
 Remaining before ship: the repo link and the rendered chart (data in
 `results/receipts_matrix_chart.json`). User ships. Byline: Gubernaut Research.*
 
@@ -14,7 +14,7 @@ agent loops before they reach your API bill
 
 **Body:**
 
-Agent frameworks retry. Loops happen — a failed tool call retried verbatim,
+Agent frameworks retry. Loops happen — the same request re-sent verbatim,
 a paraphrased demand cycled endlessly, an escalation spiral. Every lap is a
 full-context call billed at input-token prices, and the agent does not get
 bored. The failure mode isn't hypothetical; it's a line item.
@@ -48,7 +48,7 @@ upstream. The spend delta IS the measurement.
 
 - Verbatim loop: OFF $0.0921 vs ON $0.0155 — the governed arm paid
   **16.8%** of the ungoverned spend
-- Injection defiance ("ignore the governor" in every turn): OFF $0.1125
+- Injection defiance ("ignore the governor" in every turn): OFF $0.1124
   vs ON $0.0160 (**14.2%**) — the override text never reaches the
   controller, so it changes nothing
 - Hard stop by turn 4 in **every one of 10 runs**, first posture at turn 3
@@ -70,8 +70,8 @@ These totals are deliberately small — capped completions, 12–25-turn
 loops. The ratio is the finding: the ungoverned bill scales with context
 length and loop duration; the governed one stops at turn 4.
 
-**The universal savings matrix** (a second pre-registered run, five more
-model families; OpenRouter figures are the upstream's *own* metered
+**The universal savings matrix** (a second pre-registered run, additional
+measured configurations; OpenRouter figures are the upstream's *own* metered
 `usage.cost`, N=50 runs/arm; full scorecard in
 `PREREG_2026-07-19_receipts_v2_multivendor.md`):
 
@@ -86,13 +86,13 @@ model families; OpenRouter figures are the upstream's *own* metered
 | Gemma 4 26B | Gemini (native, free tier) | verbatim | 57,297 tok | 4,236 tok | **7.4%†** |
 | Gemma 4 26B | Gemini (native, free tier) | injection | 65,074 tok | 10,813 tok | **16.6%†** |
 
-Every family lands in the same place: on a saturating loop the governed arm
-pays 4.1% to 20.2% of the ungoverned bill, with the hard stop at turn 4. † Gemma on Google's native API is free-tier only,
+On the verbatim loop every family lands in the same place: the governed arm
+pays 4.1% to 20.2% of the ungoverned spend, with the hard stop at turn 4. † Gemma on Google's native API is free-tier only,
 so that row is token deltas, not dollars.
 
 Two honest notes from the cross-checks. We compared OpenRouter's own metered
 cost against our token-price math: it matched for Haiku (exactly) and Gemma
-(within 13%), but flagged a **24% divergence for Llama 4 Scout** —
+(within 12.6%), but flagged a **24% divergence for Llama 4 Scout** —
 OpenRouter routed it to a provider whose effective price differs from the
 catalog number. So Scout's dollars above are the upstream's meter, not our
 math; the *ratio* is unaffected because both arms are metered the same way.
@@ -117,9 +117,10 @@ is in the pre-registration.
 
 The deciding core is also ported to Rust and verified bit-exact against the
 Python reference (73 value-exact golden steps; wasm32 target builds).
-Validation behind the regulation layer: regulated beats baseline in 15 of
-16 generator×judge cells (11/12 off-diagonal), 13/16 at p<.05, across four
-frontier model families. DOI: 10.5281/zenodo.21303518.
+Validation behind the regulation layer: regulated beats baseline in 15 of 16
+generator×judge cells (11/12 off-diagonal), 13/16 at p<.05, across four
+frontier model families. The single null cell is GPT by Gemini at -0.04,
+reported rather than patched. DOI: 10.5281/zenodo.21303518.
 
 It's a regulation layer — measured and falsifiable, no cognition claims.
 Pre-registration, batteries, per-attempt JSONL, and the scoring script are

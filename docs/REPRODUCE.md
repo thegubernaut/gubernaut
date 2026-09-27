@@ -145,6 +145,6 @@ Useful to include: which level you ran, your platform and Python or Rust version
 package version, whether you changed `GCCConfig`, and the raw output rather than a summary
 of it.
 
-**If you changed the configuration, say so.** Every published number was measured with the
-defaults, and a different threshold means the published figures no longer describe what you
-ran.
+**If you changed the configuration, say so.** The engineering receipts were measured with
+the defaults, and a different threshold means they no longer describe what you ran. The
+cross-family validation record used a held-out evaluated configuration.

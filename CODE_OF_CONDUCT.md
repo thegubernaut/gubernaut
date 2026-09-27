@@ -61,7 +61,7 @@ individual is officially representing the project in public spaces.
 ## Enforcement
 
 Report abusive, harassing or otherwise unacceptable behaviour to **contact@gubernaut.com**.
-All complaints will be reviewed and investigated promptly and fairly. Maintainers are
+All complaints will be reviewed and investigated fairly. Maintainers are
 obligated to respect the privacy and security of the reporter of any incident.
 
 ## Enforcement guidelines

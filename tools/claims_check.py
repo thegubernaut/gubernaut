@@ -21,6 +21,7 @@ import argparse
 import json
 import re
 import sys
+from bisect import bisect_right
 from fnmatch import fnmatch
 from pathlib import Path
 
@@ -125,11 +126,47 @@ def install_pins_in(line: str, pkg: str, pins: dict) -> list[tuple[str, str]]:
     return hits
 
 
+# What starts a continuation line without being part of the sentence: indentation, a quote
+# marker, a heading or comment marker, a list bullet. Stripped only when flattening.
+_LEAD = re.compile(r"^\s*(?:(?:>|#+|//+|[-*+])\s+)*")
+
+
+def flatten(lines: list[str]) -> tuple[str, list[int]]:
+    """The document as one line, each line break a single space, and where each line starts.
+
+    Every rule below matches against this rather than line by line, because prose wraps and a
+    phrase split across a break is still the phrase. The line-by-line version passed "15 of"
+    at the end of one line and "16 cells" at the start of the next, and the Show HN draft
+    shipped 15/16 without its null through a green gate. Found by the 2026-09-27 review.
+    """
+    parts, starts, pos = [], [], 0
+    for ln in lines:
+        part = _LEAD.sub("", ln).strip()
+        starts.append(pos)
+        parts.append(part)
+        pos += len(part) + 1
+    return " ".join(parts), starts
+
+
 def check_file(path: Path, text: str, cfg: dict) -> list[Finding]:
     rel = path.relative_to(ROOT).as_posix()
     lines = text.splitlines()
     lower_lines = [ln.lower() for ln in lines]
+    flat, starts = flatten(lines)
+    lower_flat = flat.lower()
+    # Emphasis and code spans are markdown, not prose: "**13/16** at p<.05" states the pair.
+    plain = flat.replace("*", "").replace("`", "")
     found: list[Finding] = []
+    seen: set[tuple[int, str, str]] = set()
+
+    def line_of(offset: int) -> int:
+        return bisect_right(starts, offset)
+
+    def add(offset: int, rule: str, what: str, why: str) -> None:
+        i = line_of(offset)
+        if (i, rule, what) not in seen:
+            seen.add((i, rule, what))
+            found.append(Finding(path, i, rule, what, why))
 
     def context(i: int) -> str:
         """The line plus its neighbours, lowered, with markdown emphasis stripped.
@@ -162,9 +199,9 @@ def check_file(path: Path, text: str, cfg: dict) -> list[Finding]:
         if only_in and not any(matches(rel, p) for p in only_in):
             continue
         oks = [] if isinstance(spec, str) else [o.lower() for o in spec.get("negated_ok", [])]
-        for i, ln in enumerate(lines, 1):
-            if bad in ln and not escaped(i, oks):
-                found.append(Finding(path, i, "banned-string", bad, why))
+        for m in re.finditer(re.escape(bad), flat):
+            if not escaped(line_of(m.start()), oks):
+                add(m.start(), "banned-string", bad, why)
 
     # 2. banned vocabulary, word-boundary, with negation escapes
     #    'provenance' must not trip 'proven', and the required disclaimer
@@ -174,39 +211,37 @@ def check_file(path: Path, text: str, cfg: dict) -> list[Finding]:
             continue
         why = spec["why"]
         oks = [o.lower() for o in spec.get("negated_ok", [])]
-        pattern = re.compile(r"(?<![\w-])" + re.escape(word.lower()) + r"(?![\w-])")
-        for i, ln in enumerate(lower_lines, 1):
-            if not pattern.search(ln):
-                continue
-            if escaped(i, oks):
-                continue
-            found.append(Finding(path, i, "banned-word", word, why))
+        # A space in the rule matches any run of whitespace, so "100%  safe" is "100% safe".
+        pattern = re.compile(r"(?<![\w-])" + r"\s+".join(map(re.escape, word.lower().split()))
+                             + r"(?![\w-])")
+        for m in pattern.finditer(lower_flat):
+            if not escaped(line_of(m.start()), oks):
+                add(m.start(), "banned-word", word, why)
 
     # 3. fabricated social proof
     sp = cfg["social_proof_patterns"]
     sp_oks = [o.lower() for o in sp.get("negated_ok", [])]
     for pat in sp["patterns"]:
-        rx = re.compile(pat, re.IGNORECASE)
-        for i, ln in enumerate(lines, 1):
-            m = rx.search(ln)
-            if m and not escaped(i, sp_oks):
-                found.append(Finding(path, i, "social-proof", m.group(0), sp["why"]))
+        for m in re.finditer(pat, flat, re.IGNORECASE):
+            if not escaped(line_of(m.start()), sp_oks):
+                add(m.start(), "social-proof", m.group(0), sp["why"])
 
-    # 4. required pairings, whole-file
+    # 4. required pairings, whole-file, read as prose
+    def states(t: str) -> bool:
+        return t in flat or t in plain
+
     for rule in cfg["required_together"]:
-        triggers = [t for t in rule["if_any"] if t in text]
+        triggers = [t for t in rule["if_any"] if states(t)]
         if not triggers:
             continue
-        missing = [t for t in rule.get("then_all", []) if t not in text]
+        missing = [t for t in rule.get("then_all", []) if not states(t)]
         any_req = rule.get("then_any", [])
-        if any_req and not any(t in text for t in any_req):
+        if any_req and not any(states(t) for t in any_req):
             missing.append(" or ".join(any_req))
         if missing:
-            line = next((i for i, ln in enumerate(lines, 1)
-                         if any(t in ln for t in triggers)), 1)
-            found.append(Finding(path, line, "required-together",
-                                 f"{triggers[0]} without {', '.join(missing)}",
-                                 rule["why"]))
+            hits = [flat.find(t) for t in triggers if t in flat]
+            add(min(hits) if hits else 0, "required-together",
+                f"{triggers[0]} without {', '.join(missing)}", rule["why"])
 
     # 5. version pins. An install command that names a version is a promise a
     #    reader executes verbatim, so it is a claim like any other, and it went
@@ -298,6 +333,19 @@ def self_test(cfg: dict) -> int:
          "banned-word", False),
         ("The deciding meta level accepts floats only.\nNo consciousness, sentience, or "
          "experience is claimed\nor implied.", "banned-word", False),
+        # Prose wraps the other way too: a banned phrase or a pairing trigger split
+        # across a line break. Every rule used to read one line at a time, so all
+        # three of these passed clean, and the third was live in receipts/SHOW_HN.md
+        # (15/16 with no null) through a green gate until the 2026-09-27 review.
+        ("Tested across seven model\nfamilies.", "banned-string", True),
+        ("Saved up to\n96%.", "banned-string", True),
+        ("Regulated wins in 15 of\n16 cells, 13/16 at p<.05.", "required-together", True),
+        ("Regulated wins in 15 of\n16 cells, 13/16 at p<.05, null -0.04.",
+         "required-together", False),
+        ("Nothing here is 100%\nsafe.", "banned-word", True),
+        ("Trusted by\n4,000 developers.", "social-proof", True),
+        # 13/16 is only the qualifier when it is the significance count.
+        ("15/16 cells, 13/16 of them large, null -0.04.", "required-together", True),
         # version-pin, added 2026-08-07 after the front page shipped a stale
         # install command through a fully green gate. These cases are written
         # against the LIVE manifests, so they keep working as versions move.

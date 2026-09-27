@@ -126,7 +126,9 @@ which of the two you are relying on. See [LIMITS.md](LIMITS.md).
 
 Thresholds, gains, decay constants and the recovery length live in
 [`packages/python/gcc_proxy/config.py`](../packages/python/gcc_proxy/config.py) as a single
-frozen `GCCConfig`. The defaults are the ones every published number was measured with.
+frozen `GCCConfig`. The engineering receipts were measured with these defaults. The
+cross-family validation record used a held-out evaluated configuration, which is not
+published.
 
-**If you change them, the published figures no longer describe your deployment.** Say so
+**If you change them, the engineering receipts no longer describe your deployment.** Say so
 when you report results.
