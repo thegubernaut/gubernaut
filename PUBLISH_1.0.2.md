@@ -1,8 +1,8 @@
 # 1.0.2 · prepared, not published
 
-**Status: READY FOR THE HUMAN.** Four packages are at 1.0.2 on branch
-`release/1.0.2-split`, stacked on `docs/launch-readiness-2026-08-24`. Nothing is pushed and
-nothing is published: this repository's only remote is public, so both are yours (T4).
+**Status, 2026-09-26: on `main`, not published.** The four packages at 1.0.2 reached `main` on
+2026-09-26, merged with the docs revamp, and CI is green there. Every registry still serves 1.0.1.
+Publishing is the human's (T4).
 
 **What it is:** documentation and metadata only. The packages present the two products,
 split by how they run: Gubernaut Tiller, the proxy, and Gubernaut Keel, the controller
@@ -16,21 +16,20 @@ in-process. See `CHANGELOG.md` for the detail.
 | `gubernaut-core` | crates.io | 1.0.1 → **1.0.2** | Keel, Rust |
 | `gcc-core` | crates.io | stays **1.0.1** | deprecation shim, unchanged |
 
-## Before anything is pushed or published
+## Before anything is published
 
-1. **The product pages must be live.** Every package's homepage, and a link in each README,
-   now points at `gubernaut.com/tiller` or `gubernaut.com/keel`. Those pages are built in the
-   site's v1 sandbox and go live at its cut-over. Published earlier, the links 404 on four
-   registry pages and on GitHub. To publish before cut-over, set the four homepage fields back
-   to `https://gubernaut.com` and drop the two README links first.
+1. **Done 2026-09-26: the product pages are live.** Every package's homepage, and a link in each
+   README, points at `gubernaut.com/tiller` or `gubernaut.com/keel`, and both pages are served.
 2. **The review is clean.** The Codex read-only review of this branch did not run: the
    Codex usage limit was spent when it was prepared. The command is in the site's
    `runs/2026-09-18_v1-u2-packaging.md`.
-3. **CI is green on the pushed branch, the `rust + wasm target` job included.** Its drift
-   check, a fresh wasm build compared with the bytes `@gubernaut/core` embeds, could not run
-   on the machine that prepared this (no `wasm32` target). It is the one check that proves
-   the version bump left the controller byte-identical, SHA-256 `834015d7…`.
-4. **Merge order:** `docs/launch-readiness-2026-08-24` into `main`, then this branch.
+3. **Done 2026-09-26: CI is green on `main`, the `rust + wasm target` job included.** Its drift
+   check compares a fresh wasm build with the bytes `@gubernaut/core` embeds, SHA-256
+   `834015d7…`, so it is the check that the version bump left the controller byte-identical. It
+   passed once the job was pinned to rustc 1.97.1, the compiler the blob names; any newer stable
+   builds different bytes, which `embed_wasm.mjs` refuses.
+4. **Done 2026-09-26: the merge order held.** `docs/launch-readiness-2026-08-24` into `main`, then
+   this branch.
 
 ## Measured on the machine that prepared it, 2026-09-18
 
@@ -62,7 +61,7 @@ in-process. See `CHANGELOG.md` for the detail.
 
 ## Then the site
 
-The site's register (`astro-site/src/data/facts.json` `packages.*`) moves to 1.0.2 through its
+The site's register (`sandbox/src/data/register/facts.json` `packages.*`) moves to 1.0.2 through its
 register stage: each package's own `version` and `install_pinned`, and `packages.version`.
 `numbers_audit` fails the build if one moves without the others.
 
