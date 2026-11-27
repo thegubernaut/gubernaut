@@ -1,0 +1,13 @@
+{
+  "name": "gubernaut",
+  "description": "Teaches Claude to add Gubernaut Tiller or Keel to a project and prove the stop works.",
+  "author": {
+    "name": "Gubernaut",
+    "email": "contact@gubernaut.com",
+    "url": "https://gubernaut.com"
+  },
+  "homepage": "https://gubernaut.com",
+  "repository": "https://github.com/thegubernaut/gubernaut",
+  "license": "Apache-2.0",
+  "keywords": ["llm", "agents", "loop", "cost", "openai", "proxy"]
+}

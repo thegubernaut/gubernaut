@@ -1,0 +1,27 @@
+# Gubernaut
+
+> Gubernaut stops an LLM agent stuck in a loop before the next call is billed. Tiller (PyPI `gubernaut-sdk`) is a local OpenAI-compatible proxy: change the client's base URL to http://localhost:8000/v1 and a looping call is stopped locally at zero upstream cost. Keel (npm `@gubernaut/core`, crates.io `gubernaut-core`) is the same deterministic controller in-process. Apache-2.0, self-hosted, reports nothing home.
+
+On a verbatim loop the stop lands at turn 4; turns 1 to 3 are sent and billed. A stopped call returns a normal chat completion whose reply starts with `[GCC]`, with zero usage and the header `x-gcc-hard-stop: true`. The controller reads three numbers per turn (intensity, valence, repetition), never text. It is not a content filter and not injection-proof.
+
+## Docs
+
+- [README](https://raw.githubusercontent.com/thegubernaut/gubernaut/main/README.md): what it is, the keyless demo, the one line of adoption
+- [Configuration](https://raw.githubusercontent.com/thegubernaut/gubernaut/main/docs/configuration.md): CLI flags, GCC_* environment variables, routes, x-gcc-* headers, error codes
+- [Integrations](https://raw.githubusercontent.com/thegubernaut/gubernaut/main/examples/README.md): OpenAI SDK, LangChain, LlamaIndex, AutoGen, ElizaOS
+- [Keel for JavaScript](https://raw.githubusercontent.com/thegubernaut/gubernaut/main/packages/core-js/README.md): the in-process API, `Governor.create()` and `tick()`
+- [Keel for Rust](https://raw.githubusercontent.com/thegubernaut/gubernaut/main/packages/rust/README.md): the controller as a crate
+- [Limits](https://raw.githubusercontent.com/thegubernaut/gubernaut/main/docs/LIMITS.md): what it does not do
+
+## Agents
+
+- [Skill: add Gubernaut to a project](https://raw.githubusercontent.com/thegubernaut/gubernaut/main/skills/gubernaut/SKILL.md): pick Tiller or Keel, wire it, prove the stop
+- [AGENTS.md](https://raw.githubusercontent.com/thegubernaut/gubernaut/main/AGENTS.md): build, test and change this repository
+
+## Optional
+
+- [Architecture](https://raw.githubusercontent.com/thegubernaut/gubernaut/main/docs/ARCHITECTURE.md): sensor, controller, the numeric boundary
+- [Postures](https://raw.githubusercontent.com/thegubernaut/gubernaut/main/docs/POSTURES.md): DEFAULT, INHIBIT, REGROUND, the hard stop
+- [Determinism](https://raw.githubusercontent.com/thegubernaut/gubernaut/main/docs/DETERMINISM.md): cross-language parity
+- [FAQ](https://raw.githubusercontent.com/thegubernaut/gubernaut/main/docs/FAQ.md): system prompts, spend caps, latency
+- [Reproduce](https://raw.githubusercontent.com/thegubernaut/gubernaut/main/docs/REPRODUCE.md): rerun the record

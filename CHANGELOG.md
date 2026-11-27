@@ -6,6 +6,25 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 Published versions are immutable. A defect in a released version is corrected by shipping
 the next one, never by rewriting a published artifact.
 
+## Repository, 2026-11-28 (no package changes)
+
+### Added
+
+- `examples/hard_stop_demo.py`: the stop in one command, with no API key and no network. The real
+  proxy runs on a local port in front of a stand-in model that counts what reaches it.
+- `docs/configuration.md` (every flag, environment variable, route, header and error, read from the
+  code), `docs/FAQ.md` and a docs index.
+- `AGENTS.md` for coding agents, `llms.txt`, and `skills/gubernaut/`, a skill that teaches an agent to
+  add Gubernaut to a project. The repository is also a Claude Code plugin marketplace.
+
+### Changed
+
+- The README is shorter: the demo first, then the one line of adoption. The detail moved to `docs/`.
+
+### Removed
+
+- `docs/SITE_LANE_REPLY_2026-08-08.md`, an internal note between two parts of the project.
+
 ## [1.0.2] - unreleased, prepared 2026-09-18
 
 **Documentation and metadata only.** The one source line that changed is the version

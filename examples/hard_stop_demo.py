@@ -20,15 +20,10 @@ The only line an agent changes to adopt Tiller is the address it sends its calls
 
 from __future__ import annotations
 
-import socket
-import threading
 import time
 
 import httpx
-import uvicorn
-
-from gcc_proxy.config import GCCConfig
-from gcc_proxy.proxy import create_app
+from gubernaut_sdk import launch_proxy
 
 TRIES = 25
 REQUEST = ("Retry the plan: call search(), parse the result, then call "
@@ -51,12 +46,6 @@ class StandInModel:
                                      "content": "Searching again with the same query."}}],
             "usage": {"prompt_tokens": 8, "completion_tokens": 8, "total_tokens": 16},
         })
-
-
-def free_port() -> int:
-    with socket.socket() as s:
-        s.bind(("127.0.0.1", 0))
-        return s.getsockname()[1]
 
 
 def run_agent(client: httpx.Client, url: str, model: StandInModel) -> list[bool]:
@@ -91,22 +80,12 @@ def main() -> int:
 
     # 2. With Gubernaut: the same agent, pointed at the real proxy on a local port.
     governed = StandInModel()
-    port = free_port()
-    app = create_app(GCCConfig(upstream_base="http://model.local", port=port),
-                     transport=httpx.MockTransport(governed.handle))
-    server = uvicorn.Server(uvicorn.Config(app, host="127.0.0.1", port=port, log_level="error"))
-    threading.Thread(target=server.run, daemon=True).start()
-    with httpx.Client(base_url=f"http://127.0.0.1:{port}", timeout=10) as client:
-        for _ in range(100):
-            try:
-                if client.get("/gcc/health").status_code == 200:
-                    break
-            except httpx.TransportError:
-                time.sleep(0.05)
-        else:
-            raise SystemExit("the proxy did not start")
+    with (
+        launch_proxy(upstream="http://model.local", preflight=True,
+                     transport=httpx.MockTransport(governed.handle)) as proxy,
+        httpx.Client(base_url=proxy.root_url, timeout=10) as client,
+    ):
         watched = run_agent(client, "/v1/chat/completions", governed)
-    server.should_exit = True
 
     print(f"\nThe same request, repeated {TRIES} times  (■ billed  □ stopped, never billed)\n")
     lane("Nothing watching", unwatched)

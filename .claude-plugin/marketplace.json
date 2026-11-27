@@ -1,0 +1,21 @@
+{
+  "name": "gubernaut",
+  "owner": {
+    "name": "Gubernaut",
+    "email": "contact@gubernaut.com"
+  },
+  "metadata": {
+    "description": "Stop an LLM agent stuck in a loop before the next call is billed."
+  },
+  "plugins": [
+    {
+      "name": "gubernaut",
+      "source": "./",
+      "description": "Teaches Claude to add Gubernaut Tiller or Keel to a project and prove the stop works.",
+      "homepage": "https://gubernaut.com",
+      "repository": "https://github.com/thegubernaut/gubernaut",
+      "license": "Apache-2.0",
+      "keywords": ["llm", "agents", "loop", "cost", "openai", "proxy"]
+    }
+  ]
+}
