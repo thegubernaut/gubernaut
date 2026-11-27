@@ -57,7 +57,7 @@
     "url": "https://github.com/thegubernaut/gubernaut/issues"
   },
   "devDependencies": {
-    "tsup": "^8.5.1",
+    "tsup": "^9.0.0",
     "typescript": "^5.9.3"
   },
   "engines": {
