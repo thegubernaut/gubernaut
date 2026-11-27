@@ -8,6 +8,7 @@ Each demo proves the same two things through a different client stack:
 
 | Demo | Stack | Drop-in line |
 |---|---|---|
+| `hard_stop_demo.py` | none: the proxy and a stand-in model, one command, no key | nothing to change; it shows the stop |
 | `openai_sdk_demo.py` | OpenAI Python SDK | `OpenAI(base_url="http://127.0.0.1:8000/v1")` |
 | `langchain_demo.py` | LangChain | `ChatOpenAI(base_url="http://127.0.0.1:8000/v1")` |
 | `llamaindex_demo.py` | LlamaIndex | `OpenAI(api_base="http://127.0.0.1:8000/v1")` |

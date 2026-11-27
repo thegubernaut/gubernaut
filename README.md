@@ -22,6 +22,23 @@ gubernaut-proxy --upstream https://api.openai.com     # binds 127.0.0.1:8000
 client = OpenAI(base_url="http://localhost:8000/v1")   # the one line of adoption
 ```
 
+See the stop first. No API key, no network, under a second:
+
+```bash
+git clone https://github.com/thegubernaut/gubernaut && cd gubernaut
+pip install gubernaut-sdk
+python examples/hard_stop_demo.py
+```
+```
+The same request, repeated 25 times  (■ billed  □ stopped, never billed)
+
+  Nothing watching ■■■■■■■■■■■■■■■■■■■■■■■■■  25 tries, 25 billed
+  With Gubernaut   ■■■□□□□□□□□□□□□□□□□□□□□□□  3 billed, stopped at try 4
+```
+
+The demo runs the real proxy on a local port, in front of a stand-in model that counts every
+request that reaches it. Tries 1 to 3 still reach the model and are billed.
+
 [![PyPI](https://img.shields.io/pypi/v/gubernaut-sdk?label=gubernaut-sdk&color=0072B2)](https://pypi.org/project/gubernaut-sdk/)
 [![crates.io](https://img.shields.io/crates/v/gubernaut-core?label=gubernaut-core&color=0072B2)](https://crates.io/crates/gubernaut-core)
 [![npm](https://img.shields.io/npm/v/%40gubernaut%2Fcore?label=%40gubernaut%2Fcore&color=0072B2)](https://www.npmjs.com/package/@gubernaut/core)
